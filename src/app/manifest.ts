@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Brand Color Explorer",
     short_name: "Colors",
     description:
-      "Generate perceptually uniform shade families from brand colors using OKLCH. Export to CSS, Tailwind, Design Tokens, ASE, and ACO.",
+      "A free color tool by Tent Studios. Generate perceptually uniform shade families from any brand color using OKLCH. Export to CSS, Tailwind v4, W3C Design Tokens, ASE, and ACO.",
     start_url: "/",
     display: "standalone",
     background_color: "#1a1a1a",

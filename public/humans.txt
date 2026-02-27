@@ -1,6 +1,8 @@
 /* TEAM */
-Creator: Jeff Alldridge
-Site: https://brand-color-system.vercel.app
+Company: Tent Studios, LLC
+Site: https://tentstudios.com
+Product: Brand Color Explorer
+Product site: https://brand-color-system.vercel.app
 
 /* THANKS */
 Claude (Anthropic) — pair programming partner

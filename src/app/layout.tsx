@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 const APP_NAME = "Brand Color Explorer";
 const APP_DESCRIPTION =
-  "Generate perceptually uniform shade families from brand colors using OKLCH. Export to CSS custom properties, Tailwind @theme, W3C Design Tokens, ASE, and ACO.";
+  "A free color tool by Tent Studios. Generate perceptually uniform shade families from any brand color using OKLCH. Export to CSS, Tailwind v4, W3C Design Tokens, ASE, and ACO — ready for production.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://brand-color-system.vercel.app"),
@@ -23,18 +23,23 @@ export const metadata: Metadata = {
   applicationName: APP_NAME,
   keywords: [
     "OKLCH",
-    "color palette",
+    "color palette generator",
     "shade generator",
     "brand colors",
-    "Tailwind CSS",
+    "Tailwind CSS v4",
     "design tokens",
     "perceptual color",
     "gamut mapping",
     "Display P3",
     "sRGB",
+    "CSS custom properties",
+    "color system",
+    "design system colors",
+    "free color tool",
   ],
-  authors: [{ name: "Jeff Alldridge" }],
-  creator: "Jeff Alldridge",
+  authors: [{ name: "Tent Studios", url: "https://tentstudios.com" }],
+  creator: "Tent Studios, LLC",
+  publisher: "Tent Studios, LLC",
   icons: {
     icon: [
       { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
@@ -86,7 +91,11 @@ const jsonLd = {
   applicationCategory: "DesignApplication",
   operatingSystem: "Any",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  author: { "@type": "Person", name: "Jeff Alldridge" },
+  author: {
+    "@type": "Organization",
+    name: "Tent Studios, LLC",
+    url: "https://tentstudios.com",
+  },
 };
 
 export default function RootLayout({

@@ -185,6 +185,52 @@ export default function Home() {
             gamutTarget={state.gamutTarget}
           />
         </section>
+
+        {/* Footer */}
+        <footer
+          className={`text-center py-6 text-[11px] space-y-1 ${bgIsLight ? "text-black/40" : "text-white/40"}`}
+        >
+          <p>
+            A free tool by{" "}
+            <a
+              href="https://tentstudios.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              Tent Studios, LLC
+            </a>
+          </p>
+          <p>
+            Built with{" "}
+            <a
+              href="https://oklch.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              OKLCH
+            </a>
+            {" "}&middot;{" "}
+            <a
+              href="https://nextjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              Next.js
+            </a>
+            {" "}&middot;{" "}
+            <a
+              href="https://tailwindcss.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              Tailwind CSS
+            </a>
+          </p>
+        </footer>
       </main>
     </div>
   );

@@ -344,7 +344,7 @@ export default function OutputSection({
 }
 
 // -----------------------------------------------------------
-// Inline explainer — collapsible, minimal
+// Inline explainer — collapsible
 // -----------------------------------------------------------
 function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
   const [open, setOpen] = useState(false);
@@ -365,95 +365,221 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
         aria-expanded={open}
         className={`text-[10px] uppercase tracking-widest font-semibold ${txtMuted} ${bgIsLight ? "hover:text-black/80" : "hover:text-white/80"} transition-colors`}
       >
-        {open ? "Hide" : "How it works"}
+        {open ? "Hide" : "About this tool"}
       </button>
 
       {open && (
         <div
-          className={`mt-3 space-y-4 text-[11px] leading-relaxed ${txt} max-w-3xl`}
+          className={`mt-3 space-y-5 text-[11px] leading-relaxed ${txt} max-w-3xl`}
         >
+          <Section title="What is this?" headingColor={headingColor}>
+            Brand Color Explorer is a free tool by{" "}
+            <Link href="https://tentstudios.com" className={linkColor}>
+              Tent Studios
+            </Link>{" "}
+            that generates complete shade families from any set of brand colors.
+            Paste your hex codes, adjust hue, chroma, and lightness, then export
+            production-ready color scales for your design system. Everything runs
+            in your browser — no data is sent anywhere.
+          </Section>
+
+          <Section title="Quick start" headingColor={headingColor}>
+            <strong>1.</strong> Enter or paste your brand colors in the Source
+            Colors section (or click <strong>Import</strong> to paste CSS
+            variables, Tailwind themes, or design tokens).{" "}
+            <strong>2.</strong> Each color automatically fans out into a full
+            shade ramp — dark on the left, light on the right.{" "}
+            <strong>3.</strong> Fine-tune any color with the H/C/L sliders.{" "}
+            <strong>4.</strong> Copy the output as CSS, Tailwind, or download as
+            design tokens, ASE, or ACO. Drag to reorder. Toggle gamut, gap
+            sizes, and overlays from the header.
+          </Section>
+
           <Section title="Why OKLCH?" headingColor={headingColor}>
-            In HSL, a &ldquo;50% lightness&rdquo; yellow looks noticeably
-            brighter than a &ldquo;50% lightness&rdquo; blue. The numbers match,
-            but your eyes disagree.{" "}
+            In{" "}
+            <Link
+              href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl"
+              className={linkColor}
+            >
+              HSL
+            </Link>
+            , a &ldquo;50% lightness&rdquo; yellow looks noticeably brighter
+            than a &ldquo;50% lightness&rdquo; blue — the numbers match but your
+            eyes disagree.{" "}
             <Link href="https://oklch.com" className={linkColor}>
               OKLCH
             </Link>{" "}
-            is a perceptually uniform color space where equal values produce
-            equal visual weight. <Code bg={codeBg}>L</Code> is lightness (0 to
-            1), <Code bg={codeBg}>C</Code> is chroma (vividness),{" "}
-            <Code bg={codeBg}>H</Code> is hue (0 to 360°). Every swatch in the
-            same column shares identical perceived brightness, regardless of
-            hue. Colors outside your screen&apos;s gamut are{" "}
+            is a{" "}
+            <Link
+              href="https://bottosson.github.io/posts/oklab/"
+              className={linkColor}
+            >
+              perceptually uniform
+            </Link>{" "}
+            color space where equal values produce equal visual weight.{" "}
+            <Code bg={codeBg}>L</Code> is lightness (0–1),{" "}
+            <Code bg={codeBg}>C</Code> is chroma (vividness),{" "}
+            <Code bg={codeBg}>H</Code> is hue (0–360°). Every swatch in the
+            same column shares identical perceived brightness regardless of hue,
+            which means your palette looks balanced without manual tweaking.
+          </Section>
+
+          <Section title="How shades are generated" headingColor={headingColor}>
+            Each source color is converted to OKLCH. The hue and chroma stay
+            fixed while lightness is replaced by each column&apos;s target L
+            value, producing a dark-to-light ramp that preserves the
+            color&apos;s character. Columns use the{" "}
+            <Link
+              href="https://tailwindcss.com/docs/colors"
+              className={linkColor}
+            >
+              standard Tailwind shade numbers
+            </Link>{" "}
+            (50, 100, 200 … 900, 950) mapped to OKLCH lightness, so the output
+            plugs directly into a{" "}
+            <Link
+              href="https://tailwindcss.com/docs/theme"
+              className={linkColor}
+            >
+              Tailwind v4 @theme
+            </Link>{" "}
+            block.
+          </Section>
+
+          <Section title="Gamut mapping" headingColor={headingColor}>
+            Toggle between <strong>sRGB</strong> and <strong>P3</strong> in the
+            header. sRGB is the safe default — every display supports it.{" "}
+            <Link
+              href="https://webkit.org/blog/10042/wide-gamut-color-in-css-with-display-p3/"
+              className={linkColor}
+            >
+              Display P3
+            </Link>{" "}
+            is a wider gamut available on modern Apple and some Android screens.
+            When a shade falls outside the chosen gamut it is compressed using
+            the{" "}
             <Link
               href="https://www.w3.org/TR/css-color-4/#gamut-mapping"
               className={linkColor}
             >
-              mapped back
-            </Link>{" "}
-            gracefully rather than clipped.
+              CSS Color Level 4 algorithm
+            </Link>
+            , preserving hue and lightness while reducing chroma just enough to
+            fit — no harsh clipping.
           </Section>
 
-          <Section title="How shades are built" headingColor={headingColor}>
-            Each source color is converted to OKLCH. The hue and chroma stay
-            fixed while lightness is replaced by each column&apos;s L value,
-            producing a dark-to-light ramp that preserves the color&apos;s
-            character. Columns use the standard Tailwind shade numbers (50, 100,
-            200 ... 900, 950) mapped to OKLCH lightness values, so the output
-            plugs directly into a Tailwind theme.
-          </Section>
-
-          <Section title="Gamut mapping" headingColor={headingColor}>
-            Toggle between <strong>sRGB</strong> and <strong>P3</strong> gamut
-            targets. sRGB is the safe default for web — every display supports
-            it. P3 is a wider gamut available on modern Apple displays and some
-            Android screens. When a shade falls outside the chosen gamut it is
-            mapped back using OKLCH-aware compression, preserving hue and
-            lightness while reducing chroma just enough to fit.
-          </Section>
-
-          <Section title="Contrast numbers" headingColor={headingColor}>
-            Each swatch displays{" "}
+          <Section title="Accessibility & contrast" headingColor={headingColor}>
+            Each swatch shows{" "}
             <Link
               href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html"
               className={linkColor}
             >
               WCAG 2.x contrast ratios
             </Link>{" "}
-            against white and black text. <strong>4.5+</strong> passes AA for
-            body text; <strong>3+</strong> passes AA for large text (18px+ bold
-            or 24px+ regular).
+            against white and black text. <strong>4.5 : 1</strong> passes AA for
+            body text; <strong>3 : 1</strong> passes AA for large text (18 px+
+            bold or 24 px+ regular). Use the text overlay toggle to preview both
+            simultaneously.
           </Section>
 
-          <Section title="Adjustments" headingColor={headingColor}>
-            Per-color sliders fine-tune without altering the original hex.{" "}
-            <strong>H</strong> rotates the hue (nudge a blue toward teal, for
-            instance). <strong>C</strong> scales chroma for more vivid or more
-            muted shades. <strong>L</strong> shifts base lightness before the
-            ramp is applied. The tick mark on each slider indicates the original
-            value.
+          <Section title="Adjustments (H / C / L)" headingColor={headingColor}>
+            Click the slider icon on any source card to reveal per-color
+            adjustments. <strong>H</strong> rotates the hue (nudge a blue toward
+            teal, for instance). <strong>C</strong> scales chroma for more vivid
+            or more muted shades. <strong>L</strong> shifts base lightness
+            before the ramp is applied. The tick mark on each slider shows the
+            original value. The top bar of the card shows a before/after split
+            when adjustments are active.
           </Section>
 
-          <Section title="Exports" headingColor={headingColor}>
-            <strong>CSS</strong> copies hex custom properties for any
-            stylesheet. <strong>Tailwind</strong> outputs an{" "}
+          <Section title="Export formats" headingColor={headingColor}>
+            <strong>CSS</strong> — hex{" "}
+            <Link
+              href="https://developer.mozilla.org/en-US/docs/Web/CSS/--*"
+              className={linkColor}
+            >
+              custom properties
+            </Link>{" "}
+            for any stylesheet.{" "}
+            <strong>Tailwind</strong> — an{" "}
             <Link
               href="https://tailwindcss.com/docs/theme"
               className={linkColor}
             >
               @theme
             </Link>{" "}
-            block with OKLCH values for v4. <strong>Tokens</strong> downloads{" "}
+            block with OKLCH values for Tailwind CSS v4.{" "}
+            <strong>Tokens</strong> —{" "}
             <Link
               href="https://tr.designtokens.org/format/"
               className={linkColor}
             >
-              W3C Design Tokens
+              W3C Design Tokens (DTCG)
             </Link>{" "}
-            JSON compatible with Tokens Studio, Style Dictionary, and Figma.{" "}
-            <strong>.ase</strong> (Adobe Swatch Exchange) opens in Illustrator,
-            Photoshop, and InDesign. <strong>.aco</strong> (Adobe Color Swatch)
-            is Photoshop-specific.
+            JSON compatible with{" "}
+            <Link
+              href="https://tokens.studio"
+              className={linkColor}
+            >
+              Tokens Studio
+            </Link>
+            ,{" "}
+            <Link
+              href="https://amzn.github.io/style-dictionary/"
+              className={linkColor}
+            >
+              Style Dictionary
+            </Link>
+            , and Figma.{" "}
+            <strong>.ase</strong> (Adobe Swatch Exchange) — Illustrator,
+            Photoshop, InDesign.{" "}
+            <strong>.aco</strong> (Adobe Color Swatch) — Photoshop.
+          </Section>
+
+          <Section title="Drag & drop" headingColor={headingColor}>
+            Source color cards can be dragged to reorder. Shade grid rows can
+            also be reordered by dragging the name column. Reordering
+            automatically disables &ldquo;Sort by Hue&rdquo; so your custom
+            order is preserved. Click &ldquo;Sort by Hue&rdquo; in the header to
+            re-sort alphabetically by hue at any time.
+          </Section>
+
+          <Section title="Learn more" headingColor={headingColor}>
+            <Link
+              href="https://oklch.com"
+              className={linkColor}
+            >
+              oklch.com
+            </Link>{" "}
+            — interactive OKLCH color picker.{" "}
+            <Link
+              href="https://bottosson.github.io/posts/oklab/"
+              className={linkColor}
+            >
+              A perceptual color space for image processing
+            </Link>{" "}
+            — Bj&ouml;rn Ottosson&apos;s original paper.{" "}
+            <Link
+              href="https://www.w3.org/TR/css-color-4/"
+              className={linkColor}
+            >
+              CSS Color Level 4
+            </Link>{" "}
+            — W3C specification.{" "}
+            <Link
+              href="https://tailwindcss.com/docs/colors"
+              className={linkColor}
+            >
+              Tailwind CSS Colors
+            </Link>{" "}
+            — default shade scale reference.{" "}
+            <Link
+              href="https://culorijs.org"
+              className={linkColor}
+            >
+              culori
+            </Link>{" "}
+            — the color library powering conversions under the hood.
           </Section>
         </div>
       )}
