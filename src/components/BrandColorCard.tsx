@@ -173,7 +173,7 @@ export default function BrandColorCard({
             {canRemove && (
               <button
                 onClick={() => onRemove(index)}
-                className={`flex items-center justify-center w-6 h-6 rounded transition-colors ${
+                className={`flex items-center justify-center w-8 h-6 rounded transition-colors ${
                   bgIsLight
                     ? "text-black/25 hover:bg-red-500/10 hover:text-red-500"
                     : "text-white/25 hover:bg-red-500/15 hover:text-red-400"
@@ -199,7 +199,7 @@ export default function BrandColorCard({
             {/* Adjust Toggle */}
             <button
               onClick={() => setShowAdjustmentsLocal(!showAdjustmentsLocal)}
-              className={`flex items-center justify-center w-6 h-6 rounded transition-colors ${
+              className={`flex items-center justify-center w-8 h-6 rounded transition-colors ${
                 showAdjustmentsLocal
                   ? bgIsLight
                     ? "bg-black/10 text-black"

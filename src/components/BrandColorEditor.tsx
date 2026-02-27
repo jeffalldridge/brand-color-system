@@ -14,7 +14,7 @@ import {
 import {
   SortableContext,
   sortableKeyboardCoordinates,
-  horizontalListSortingStrategy,
+  rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import BrandColorCard from "./BrandColorCard";
 
@@ -84,7 +84,7 @@ export default function BrandColorEditor({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={itemIds} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={itemIds} strategy={rectSortingStrategy}>
         <div
           className="grid gap-3 pb-4"
           style={{
