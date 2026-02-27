@@ -37,10 +37,10 @@ OKLCH-based color playground for generating perceptually uniform shade families 
 ## Deploy
 Push to GitHub → Vercel auto-deploys. No env vars needed. Static export.
 
-## _INPUT / _PROCESSED Workflow
-- **`_INPUT.md`** — Drop reference material, design specs, or notes here for the next session to incorporate.
-- **`_PROCESSED.md`** — Dump removed/superseded content here during cleanup sweeps. Safe to delete once reviewed.
-- Both files are committable (not gitignored). This gives a clear audit trail of what was removed and a staging area for new material.
+## _INBOX / _PROCESSED Workflow
+- **`_INBOX/`** — Drop reference material, design specs, or notes here for the next session to incorporate.
+- **`_PROCESSED/`** — Dump removed/superseded content here during cleanup sweeps. Safe to delete once reviewed. Use dated filenames (e.g. `cleanup-2026-02-27.md`).
+- Both folders are committable (not gitignored). This gives a clear audit trail of what was removed and a staging area for new material.
 
 ## Project Structure
 ```
@@ -144,7 +144,7 @@ All state in `usePaletteState.ts` via `useReducer`. `generateAllFamilies` wrappe
 ## Commit Workflow
 - Make natural commits in batches that make sense
 - Never push — the user pushes manually
-- Use `_PROCESSED.md` to dump removed content during sweeps
+- Use `_PROCESSED/` to dump removed content during sweeps
 
 ## Shutdown Cleanup Scope
 **Safe to clean:** `.next/` (build cache), any `*.tsbuildinfo`, temp files
