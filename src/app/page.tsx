@@ -142,7 +142,7 @@ export default function Home() {
         </section>
 
         <div
-          className={`w-full h-px ${bgIsLight ? "bg-black/15" : "bg-white/15"}`}
+          className={`w-full h-px -mt-3 ${bgIsLight ? "bg-black/15" : "bg-white/15"}`}
         />
 
         {/* Shade grid */}
