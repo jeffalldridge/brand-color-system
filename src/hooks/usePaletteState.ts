@@ -90,7 +90,7 @@ function reducer(state: PaletteState, action: PaletteAction): PaletteState {
       const updated = [...state.brandColors];
       const [moved] = updated.splice(action.fromIndex, 1);
       updated.splice(action.toIndex, 0, moved);
-      return { ...state, brandColors: updated };
+      return { ...state, brandColors: updated, sortByHue: false };
     }
     case "ADD_COLOR": {
       const id = `color-${Date.now()}`;
