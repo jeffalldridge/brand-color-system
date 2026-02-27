@@ -83,24 +83,23 @@ function SortableRow({
 
   return (
     <div ref={setNodeRef} style={style} className="flex items-stretch group" aria-roledescription="sortable">
+      {/* Accent strokes — absolutely positioned in the page margins */}
+      <div
+        className={`absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full -translate-x-2 transition-opacity ${isDragging ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        style={{ backgroundColor: family.adjustedHex }}
+      />
+      <div
+        className={`absolute right-0 top-1.5 bottom-1.5 w-0.5 rounded-full translate-x-2 transition-opacity ${isDragging ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        style={{ backgroundColor: family.adjustedHex }}
+      />
       {/* Name column — drag handle */}
       <div
-        className={`w-24 shrink-0 flex items-center pr-3 py-1 cursor-grab active:cursor-grabbing select-none rounded-r-md transition-all border-l-2 ${bgIsLight ? "group-hover:bg-black/[0.04]" : "group-hover:bg-white/[0.04]"}`}
+        className={`w-24 shrink-0 mr-2 flex items-center py-1 px-2 rounded-md cursor-grab active:cursor-grabbing select-none transition-colors ${bgIsLight ? "group-hover:bg-black/[0.04]" : "group-hover:bg-white/[0.04]"}`}
         aria-label={`Drag to reorder ${family.brand.name}`}
-        style={{
-          borderLeftColor: isDragging ? family.adjustedHex : "transparent",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.borderLeftColor = family.adjustedHex;
-        }}
-        onMouseLeave={(e) => {
-          if (!isDragging)
-            e.currentTarget.style.borderLeftColor = "transparent";
-        }}
         {...attributes}
         {...listeners}
       >
-        <div className="flex flex-col min-w-0 pl-1">
+        <div className="flex flex-col min-w-0">
           <span
             className={`text-sm font-semibold ${txt} truncate transition-colors ${bgIsLight ? "group-hover:text-black" : "group-hover:text-white"}`}
           >
@@ -189,7 +188,7 @@ export default function ShadeGrid({
     <div className="pt-4">
       {/* Column header labels */}
       <div className="flex items-center mb-2">
-        <div className="w-24 shrink-0 pr-2">
+        <div className="w-24 shrink-0 mr-2 pr-2">
           <span
             className={`text-[10px] ${txtMuted} uppercase tracking-wider font-medium cursor-default`}
             title="Tailwind shade numbers mapped to OKLCH lightness values (L)"
