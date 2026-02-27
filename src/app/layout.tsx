@@ -35,16 +35,32 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Jeff Alldridge" }],
   creator: "Jeff Alldridge",
+  icons: {
+    icon: [
+      { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon-180.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     title: APP_NAME,
     description: APP_DESCRIPTION,
     siteName: APP_NAME,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Brand Color Explorer — OKLCH shade generator",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: APP_NAME,
     description: APP_DESCRIPTION,
+    images: ["/og-image.png"],
   },
   appleWebApp: {
     capable: true,
@@ -61,6 +77,18 @@ export const viewport: Viewport = {
   colorScheme: "dark light",
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: APP_NAME,
+  description: APP_DESCRIPTION,
+  url: "https://brand-color-system.vercel.app",
+  applicationCategory: "DesignApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  author: { "@type": "Person", name: "Jeff Alldridge" },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -68,6 +96,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

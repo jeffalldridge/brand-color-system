@@ -1,0 +1,13 @@
+/* TEAM */
+Creator: Jeff Alldridge
+Site: https://brand-color-system.vercel.app
+
+/* THANKS */
+Claude (Anthropic) — pair programming partner
+
+/* SITE */
+Standards: HTML5, CSS4, ECMAScript 2024
+Language: English
+Components: Next.js 16, React 19, Tailwind CSS v4, culori v4, @dnd-kit
+Color space: OKLCH (perceptually uniform)
+Gamut targets: sRGB, Display P3
