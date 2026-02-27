@@ -1,6 +1,7 @@
 import type { BrandColor, RampConfig } from './types';
 
 export const DEFAULT_BRAND_COLORS: BrandColor[] = [
+  { id: 'tones', name: 'Tones', hex: '#737373', hueShift: 0, saturationShift: 0, lightnessShift: 0 },
   { id: 'blue', name: 'Blue', hex: '#2563eb', hueShift: 0, saturationShift: 0, lightnessShift: 0 },
   { id: 'purple', name: 'Purple', hex: '#7c3aed', hueShift: 0, saturationShift: 0, lightnessShift: 0 },
   { id: 'teal', name: 'Teal', hex: '#0d9488', hueShift: 0, saturationShift: 0, lightnessShift: 0 },
