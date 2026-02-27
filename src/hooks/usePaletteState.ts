@@ -44,6 +44,7 @@ export type PaletteAction =
   | { type: "SET_SORT_BY_HUE"; value: boolean }
   | { type: "SET_GAMUT_TARGET"; value: GamutTarget }
   | { type: "SET_BRAND_ORDER"; ids: string[] }
+  | { type: "IMPORT_COLORS"; colors: { name: string; hex: string }[] }
   | { type: "RESET" }
   | { type: "HYDRATE"; payload: PaletteState };
 
@@ -133,6 +134,17 @@ function reducer(state: PaletteState, action: PaletteAction): PaletteState {
         if (!action.ids.includes(c.id)) reordered.push(c);
       }
       return { ...state, brandColors: reordered, sortByHue: false };
+    }
+    case "IMPORT_COLORS": {
+      const brandColors: BrandColor[] = action.colors.map((c, i) => ({
+        id: `import-${Date.now()}-${i}`,
+        name: c.name,
+        hex: c.hex,
+        hueShift: 0,
+        saturationShift: 0,
+        lightnessShift: 0,
+      }));
+      return { ...state, brandColors, sortByHue: true };
     }
     case "RESET":
       return initialState;

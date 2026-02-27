@@ -7,12 +7,23 @@ import ShadeGrid from "@/components/ShadeGrid";
 import Header from "@/components/Header";
 import OutputSection from "@/components/OutputSection";
 import ColorWheel from "@/components/ColorWheel";
+import ImportPanel from "@/components/ImportPanel";
+import type { ParsedColor } from "@/lib/import-parser";
 
 export default function Home() {
   const { state, dispatch, families, bgSliderValue, bgIsLight } =
     usePaletteState();
 
   const [showHueMap, setShowHueMap] = useState(true);
+  const [showImport, setShowImport] = useState(false);
+
+  const handleImport = useCallback(
+    (colors: ParsedColor[]) => {
+      dispatch({ type: "IMPORT_COLORS", colors });
+      setShowImport(false);
+    },
+    [dispatch],
+  );
 
   const handleReorderRow = useCallback(
     (fromId: string, toId: string) => {
@@ -70,7 +81,30 @@ export default function Home() {
             >
               Hue Map
             </button>
+            <button
+              onClick={() => setShowImport((v) => !v)}
+              title="Import colors from CSS, Tailwind, design tokens, or hex list"
+              className={`px-2 py-0.5 text-[10px] font-medium rounded border transition-colors ${
+                showImport
+                  ? bgIsLight
+                    ? "bg-black/10 border-black/20 text-black/70"
+                    : "bg-white/15 border-white/20 text-white/70"
+                  : bgIsLight
+                    ? "bg-transparent border-black/15 text-black/40 hover:text-black/60 hover:border-black/25"
+                    : "bg-transparent border-white/15 text-white/40 hover:text-white/60 hover:border-white/25"
+              }`}
+            >
+              Import
+            </button>
           </div>
+          {showImport && (
+            <ImportPanel
+              bgIsLight={bgIsLight}
+              currentColorCount={state.brandColors.length}
+              onImport={handleImport}
+              onClose={() => setShowImport(false)}
+            />
+          )}
           <div className="flex items-start">
             {showHueMap && (
               <div className="shrink-0 w-[280px] hidden lg:flex lg:items-center lg:justify-center">
