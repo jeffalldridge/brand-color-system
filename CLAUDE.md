@@ -154,7 +154,8 @@ These are the canonical values — every component should match:
 - **Source cards** (BrandColorEditor): dnd-kit with `rectSortingStrategy` (handles multi-row wrapping), dispatches `REORDER_COLOR` + sets `sortByHue: false`
 - **Shade grid rows** (ShadeGrid): vertical dnd-kit with `verticalListSortingStrategy`, drag handle is name column only
 - Dragging a shade row dispatches `SET_BRAND_ORDER` which atomically reorders `brandColors[]` and sets `sortByHue: false`
-- Colored left-border accent on hover indicates the drag handle
+- Floating accent strokes (absolute positioned, pill-shaped `rounded-full`, `w-0.5`) on both left and right margins indicate the drag handle row on hover
+- Shade grid name column has `mr-2` gap before swatch grid; column header spacer matches
 
 ### Form UX
 - Name and hex inputs: select-all on focus, Enter/Escape to blur
