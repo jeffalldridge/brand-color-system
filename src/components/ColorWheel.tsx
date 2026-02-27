@@ -30,7 +30,12 @@ function polar(
   deg: number,
 ): { x: number; y: number } {
   const rad = ((deg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  // Round to 4 decimals to prevent SSR/client hydration mismatch
+  // from floating-point nondeterminism between Node and browser engines.
+  return {
+    x: Math.round((cx + r * Math.cos(rad)) * 1e4) / 1e4,
+    y: Math.round((cy + r * Math.sin(rad)) * 1e4) / 1e4,
+  };
 }
 
 /** Build an SVG arc segment path between two angles at inner/outer radii. */
