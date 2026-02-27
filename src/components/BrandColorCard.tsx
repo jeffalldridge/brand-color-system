@@ -80,6 +80,7 @@ export default function BrandColorCard({
       {/* Top Bar - Color display area and drag handle */}
       <div
         className="w-full h-10 relative overflow-hidden flex cursor-grab active:cursor-grabbing group/header"
+        title="Drag to reorder"
         {...attributes}
         {...listeners}
       >
@@ -126,6 +127,7 @@ export default function BrandColorCard({
             type="text"
             value={color.name}
             placeholder="Name"
+            aria-label="Color name"
             onChange={(e) => onNameChange(index, e.target.value)}
             onFocus={(e) => e.target.select()}
             onKeyDown={(e) => {
@@ -146,6 +148,7 @@ export default function BrandColorCard({
             type="text"
             value={color.hex}
             placeholder="Hex"
+            aria-label="Hex color code"
             onChange={(e) => {
               const val = e.target.value;
               if (/^#[0-9a-fA-F]{0,6}$/.test(val) || val === "#") {
@@ -178,6 +181,8 @@ export default function BrandColorCard({
                     : "text-white/40 hover:bg-white/10 hover:text-white/70"
               }`}
               title="Toggle color adjustments (HCL)"
+              aria-expanded={showAdjustmentsLocal}
+              aria-label="Toggle color adjustments"
             >
               <svg
                 width="12"
@@ -271,6 +276,7 @@ export default function BrandColorCard({
               const sliders = [
                 {
                   label: "H",
+                  ariaLabel: "Hue shift",
                   absValue: `${Math.round(absH)}°`,
                   delta:
                     color.hueShift !== 0
@@ -291,6 +297,7 @@ export default function BrandColorCard({
                 },
                 {
                   label: "C",
+                  ariaLabel: "Chroma",
                   absValue: absC.toFixed(3),
                   delta:
                     color.saturationShift !== 0
@@ -321,6 +328,7 @@ export default function BrandColorCard({
                 },
                 {
                   label: "L",
+                  ariaLabel: "Lightness",
                   absValue: absL.toFixed(2),
                   delta:
                     color.lightnessShift !== 0
@@ -377,6 +385,7 @@ export default function BrandColorCard({
                       step={s.step}
                       value={s.value}
                       onChange={(e) => s.onChange(Number(e.target.value))}
+                      aria-label={s.ariaLabel}
                       className="custom-range w-full appearance-none bg-transparent relative z-20"
                     />
                   </div>

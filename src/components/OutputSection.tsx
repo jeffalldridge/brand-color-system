@@ -99,6 +99,7 @@ export default function OutputSection({
               copyToClipboard(generateCssCustomProperties(families), "css")
             }
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            title="Copy CSS custom properties"
           >
             {copiedKey === "css" ? "Copied!" : "CSS"}
           </button>
@@ -107,6 +108,7 @@ export default function OutputSection({
               copyToClipboard(generateTailwindTheme(families), "tw")
             }
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            title="Copy Tailwind @theme"
           >
             {copiedKey === "tw" ? "Copied!" : "Tailwind"}
           </button>
@@ -155,6 +157,7 @@ export default function OutputSection({
                   setExpandedFamily(isExpanded ? null : family.brand.id)
                 }
                 className={`w-full flex items-center gap-2 px-3 py-2 text-left rounded transition-colors ${expandBg}`}
+                aria-expanded={isExpanded}
               >
                 <div
                   className="w-3 h-3 rounded-sm shrink-0"
@@ -207,62 +210,106 @@ export default function OutputSection({
                           <td className="py-1 pr-3 font-bold">{shade.step}</td>
                           <td
                             className={`py-1 pr-3 cursor-pointer ${hoverCell}`}
+                            role="button"
+                            tabIndex={0}
                             onClick={() =>
                               copyToClipboard(
                                 shade.hex,
                                 `${family.brand.name}-${shade.step}-hex`,
                               )
                             }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                copyToClipboard(
+                                  shade.hex,
+                                  `${family.brand.name}-${shade.step}-hex`,
+                                );
+                              }
+                            }}
                           >
                             {shade.hex}
                             {copiedKey ===
                               `${family.brand.name}-${shade.step}-hex` && (
-                              <span className="ml-1 text-green-500">ok</span>
+                              <span className="ml-1 text-green-500" aria-live="polite">ok</span>
                             )}
                           </td>
                           <td
                             className={`py-1 pr-3 cursor-pointer ${hoverCell}`}
+                            role="button"
+                            tabIndex={0}
                             onClick={() =>
                               copyToClipboard(
                                 shade.rgb,
                                 `${family.brand.name}-${shade.step}-rgb`,
                               )
                             }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                copyToClipboard(
+                                  shade.rgb,
+                                  `${family.brand.name}-${shade.step}-rgb`,
+                                );
+                              }
+                            }}
                           >
                             {shade.rgb}
                             {copiedKey ===
                               `${family.brand.name}-${shade.step}-rgb` && (
-                              <span className="ml-1 text-green-500">ok</span>
+                              <span className="ml-1 text-green-500" aria-live="polite">ok</span>
                             )}
                           </td>
                           <td
                             className={`py-1 pr-3 cursor-pointer ${hoverCell}`}
+                            role="button"
+                            tabIndex={0}
                             onClick={() =>
                               copyToClipboard(
                                 shade.hsl,
                                 `${family.brand.name}-${shade.step}-hsl`,
                               )
                             }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                copyToClipboard(
+                                  shade.hsl,
+                                  `${family.brand.name}-${shade.step}-hsl`,
+                                );
+                              }
+                            }}
                           >
                             {shade.hsl}
                             {copiedKey ===
                               `${family.brand.name}-${shade.step}-hsl` && (
-                              <span className="ml-1 text-green-500">ok</span>
+                              <span className="ml-1 text-green-500" aria-live="polite">ok</span>
                             )}
                           </td>
                           <td
                             className={`py-1 pr-3 cursor-pointer ${hoverCell}`}
+                            role="button"
+                            tabIndex={0}
                             onClick={() =>
                               copyToClipboard(
                                 shade.oklchCss,
                                 `${family.brand.name}-${shade.step}-oklch`,
                               )
                             }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                copyToClipboard(
+                                  shade.oklchCss,
+                                  `${family.brand.name}-${shade.step}-oklch`,
+                                );
+                              }
+                            }}
                           >
                             {shade.oklchCss}
                             {copiedKey ===
                               `${family.brand.name}-${shade.step}-oklch` && (
-                              <span className="ml-1 text-green-500">ok</span>
+                              <span className="ml-1 text-green-500" aria-live="polite">ok</span>
                             )}
                           </td>
                           <td className="py-1">
@@ -315,6 +362,7 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
     <div className={`border-t pt-3 ${border}`}>
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
         className={`text-[10px] uppercase tracking-widest font-semibold ${txtMuted} ${bgIsLight ? "hover:text-black/80" : "hover:text-white/80"} transition-colors`}
       >
         {open ? "Hide" : "How it works"}

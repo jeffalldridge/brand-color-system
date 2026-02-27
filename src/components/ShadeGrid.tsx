@@ -82,10 +82,11 @@ function SortableRow({
   };
 
   return (
-    <div ref={setNodeRef} style={style} className="flex items-stretch group">
+    <div ref={setNodeRef} style={style} className="flex items-stretch group" aria-roledescription="sortable">
       {/* Name column — drag handle */}
       <div
         className={`w-24 shrink-0 flex items-center pr-3 py-1 cursor-grab active:cursor-grabbing select-none rounded-r-md transition-all border-l-2 ${bgIsLight ? "group-hover:bg-black/[0.04]" : "group-hover:bg-white/[0.04]"}`}
+        aria-label={`Drag to reorder ${family.brand.name}`}
         style={{
           borderLeftColor: isDragging ? family.adjustedHex : "transparent",
         }}

@@ -70,8 +70,9 @@ export default function ImportPanel({
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder={PLACEHOLDER}
-        rows={6}
-        className={`w-full rounded-lg border px-3 py-2 text-xs font-mono resize-y transition-colors focus:outline-none ${border} ${txt} ${
+        rows={8}
+        aria-label="Paste color system to import"
+        className={`w-full max-h-[50vh] rounded-lg border px-3 py-2 text-xs font-mono resize-y transition-colors focus:outline-none ${border} ${txt} ${
           bgIsLight
             ? "bg-white/60 placeholder-black/30 focus:border-black/30"
             : "bg-black/40 placeholder-white/25 focus:border-white/30"
@@ -79,7 +80,8 @@ export default function ImportPanel({
         autoFocus
       />
 
-      {/* Status line */}
+      {/* Status line — aria-live announces format detection changes */}
+      <div aria-live="polite" aria-atomic="true">
       {text.trim() && (
         <div className="flex items-center gap-2 flex-wrap">
           {/* Format badge */}
@@ -106,6 +108,7 @@ export default function ImportPanel({
           )}
         </div>
       )}
+      </div>
 
       {/* Preview swatches */}
       {hasColors && (
@@ -132,6 +135,7 @@ export default function ImportPanel({
         <button
           onClick={handleImport}
           disabled={!hasColors}
+          aria-disabled={!hasColors}
           className={`px-4 py-1.5 text-xs font-medium rounded-md transition-colors ${
             hasColors
               ? btnPrimary

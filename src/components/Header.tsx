@@ -74,6 +74,8 @@ export default function Header({
 
           {/* View toggles */}
           <div
+            role="group"
+            aria-label="View toggles"
             className={`flex rounded-md overflow-hidden border ${bgIsLight ? "border-black/20" : "border-white/20"}`}
           >
             {(
@@ -116,6 +118,7 @@ export default function Header({
                 key={toggle.label}
                 onClick={toggle.action}
                 title={toggle.title}
+                aria-pressed={toggle.active}
                 className={`px-3 py-1 text-xs font-medium transition-colors ${
                   toggle.active
                     ? bgIsLight
@@ -133,6 +136,8 @@ export default function Header({
 
           {/* Gap size control */}
           <div
+            role="group"
+            aria-label="Gap size"
             className={`flex rounded-md overflow-hidden border ${bgIsLight ? "border-black/20" : "border-white/20"}`}
           >
             {(
@@ -161,6 +166,7 @@ export default function Header({
                   dispatch({ type: "SET_GAP_SIZE", value: opt.value })
                 }
                 title={opt.title}
+                aria-pressed={state.gapSize === opt.value}
                 className={`px-3 py-1 text-xs font-medium transition-colors ${
                   state.gapSize === opt.value
                     ? bgIsLight
@@ -181,6 +187,8 @@ export default function Header({
 
           {/* Gamut target */}
           <div
+            role="group"
+            aria-label="Gamut target"
             className={`flex rounded-md overflow-hidden border ${bgIsLight ? "border-black/20" : "border-white/20"}`}
           >
             {(["srgb", "p3"] as const).map((g) => (
@@ -192,6 +200,7 @@ export default function Header({
                     ? "Clamp colors to sRGB gamut"
                     : "Clamp colors to Display P3 gamut (wider)"
                 }
+                aria-pressed={state.gamutTarget === g}
                 className={`px-3 py-1 text-xs font-medium transition-colors ${
                   state.gamutTarget === g
                     ? bgIsLight

@@ -27,6 +27,8 @@ export default function BackgroundSlider({
           max={100}
           value={100 - value}
           onChange={(e) => onChange(100 - Number(e.target.value))}
+          aria-label="Background brightness"
+          aria-valuetext={`${value}% — ${value > 60 ? "light" : value > 30 ? "medium" : "dark"} background`}
           className="w-32 hover:opacity-80 transition-opacity custom-range"
           style={
             {

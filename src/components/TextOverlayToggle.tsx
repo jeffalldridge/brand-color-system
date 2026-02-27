@@ -33,11 +33,16 @@ export default function TextOverlayToggle({
       <label className={`text-xs font-medium whitespace-nowrap ${txt}`}>
         Text Overlay
       </label>
-      <div className={`flex rounded-md overflow-hidden border ${border}`}>
+      <div
+        role="group"
+        aria-label="Text overlay"
+        className={`flex rounded-md overflow-hidden border ${border}`}
+      >
         {OPTIONS.map((opt) => (
           <button
             key={opt.value}
             onClick={() => onChange(opt.value)}
+            aria-pressed={value === opt.value}
             className={`px-3 py-1 text-xs font-medium transition-colors ${
               value === opt.value ? activeClass : inactiveClass
             }`}
