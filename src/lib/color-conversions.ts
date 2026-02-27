@@ -81,6 +81,17 @@ export function oklchToCssString(l: number, c: number, h: number): string {
   return `oklch(${l.toFixed(4)} ${c.toFixed(4)} ${h.toFixed(2)})`;
 }
 
+/**
+ * Try to parse any CSS color string (rgb(), hsl(), oklch(), named, hex) to 6-digit hex.
+ * Returns null if culori can't parse it.
+ */
+export function cssColorToHex(input: string): string | null {
+  const parsed = parse(input.trim());
+  if (!parsed) return null;
+  const hex = formatHex(parsed);
+  return hex || null;
+}
+
 export function oklchToRgbValues(
   l: number,
   c: number,

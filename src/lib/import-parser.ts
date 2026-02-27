@@ -1,4 +1,4 @@
-import { oklchToHex, hexToOklch } from "./color-conversions";
+import { oklchToHex, hexToOklch, cssColorToHex } from "./color-conversions";
 
 export interface ParsedColor {
   name: string;
@@ -22,12 +22,15 @@ function detectFormat(text: string): Format {
   if (trimmed.startsWith("{")) {
     try {
       const obj = JSON.parse(trimmed);
-      // Check if it looks like design tokens (nested objects with $value)
       const keys = Object.keys(obj);
       for (const key of keys) {
         const val = obj[key];
         if (val && typeof val === "object" && !Array.isArray(val)) {
-          // Check for $value in sub-keys or direct $value
+          // Flat tokens: top-level key has $value directly
+          if ("$value" in val && typeof val.$value === "string") {
+            return "tokens";
+          }
+          // Nested tokens: sub-keys have $value
           const subKeys = Object.keys(val);
           for (const sk of subKeys) {
             if (
@@ -50,8 +53,8 @@ function detectFormat(text: string): Format {
     return "tailwind";
   }
 
-  // Check for CSS custom properties with hex values
-  if (/--[\w-]+\s*:\s*#[0-9a-fA-F]{3,8}/i.test(text)) {
+  // Check for CSS custom properties with any value (hex, rgb, hsl, etc.)
+  if (/--[\w-]+\s*:\s*[^;}\n]+/i.test(text)) {
     return "css";
   }
 
@@ -68,11 +71,9 @@ function titleCase(s: string): string {
 }
 
 /**
- * Clean a CSS variable name into a human-readable color name.
- * Strips common prefixes and the step number suffix.
- * "--color-c-yellow-500" → "yellow"
- * "--c-tone-200" → "tone"
- * "--brand-dark-blue-500" → "dark-blue"
+ * Extract family and step from a CSS variable name.
+ * "--color-c-yellow-500" → { family: "c-yellow", step: 500 }
+ * "--primary" → null (no step number)
  */
 function extractFamilyAndStep(varName: string): {
   family: string;
@@ -97,10 +98,37 @@ function extractFamilyAndStep(varName: string): {
  * But preserve multi-word names: "dark-blue" stays "dark-blue"
  */
 function cleanFamilySlug(slug: string): string {
-  // Strip known prefixes
   return slug
     .replace(/^(c|color|brand|clr|col)-/, "")
     .replace(/^(tw|css)-/, "");
+}
+
+/**
+ * Try to resolve a CSS value string to a 6-digit hex color.
+ * Handles #hex, rgb(), hsl(), oklch(), named colors via culori.
+ */
+function resolveToHex(value: string): string | null {
+  const trimmed = value.trim().replace(/;$/, "").trim();
+
+  // Try direct hex match first (fastest path)
+  const hexMatch = trimmed.match(/^(#[0-9a-fA-F]{3,8})\b/);
+  if (hexMatch) {
+    const hex = hexMatch[1].toLowerCase();
+    const digits = hex.slice(1);
+    if ([3, 4, 6, 8].includes(digits.length)) {
+      // Normalize shorthand to 6-digit
+      if (digits.length === 3) {
+        return `#${digits[0]}${digits[0]}${digits[1]}${digits[1]}${digits[2]}${digits[2]}`;
+      }
+      if (digits.length === 4) {
+        return `#${digits[0]}${digits[0]}${digits[1]}${digits[1]}${digits[2]}${digits[2]}`;
+      }
+      return hex.slice(0, 7); // Strip alpha from 8-digit
+    }
+  }
+
+  // Fall through to culori's universal parser (handles rgb, hsl, oklch, named, etc.)
+  return cssColorToHex(trimmed);
 }
 
 // ────────────────────────────────────────────
@@ -108,112 +136,158 @@ function cleanFamilySlug(slug: string): string {
 // ────────────────────────────────────────────
 
 function parseHexList(text: string): ParsedColor[] {
-  const hexPattern = /#[0-9a-fA-F]{3,8}\b/g;
-  const matches = text.match(hexPattern) || [];
-
-  // Deduplicate and validate
-  const seen = new Set<string>();
   const colors: ParsedColor[] = [];
+  const seen = new Set<string>();
 
-  for (const raw of matches) {
-    const hex = raw.toLowerCase();
-    // Only accept 3, 4, 6, or 8 digit hex (standard CSS hex lengths)
-    const digits = hex.slice(1);
-    if (![3, 4, 6, 8].includes(digits.length)) continue;
+  // Pass 1: Extract #hex values
+  const hexPattern = /#[0-9a-fA-F]{3,8}\b/g;
+  const hexMatches = text.match(hexPattern) || [];
 
-    // Normalize shorthand to 6-digit
-    let normalized = hex;
-    if (digits.length === 3) {
-      normalized = `#${digits[0]}${digits[0]}${digits[1]}${digits[1]}${digits[2]}${digits[2]}`;
-    }
+  for (const raw of hexMatches) {
+    const hex = resolveToHex(raw);
+    if (!hex) continue;
+    if (seen.has(hex)) continue;
 
-    if (seen.has(normalized)) continue;
-
-    // Validate with culori
-    const oklch = hexToOklch(normalized);
+    const oklch = hexToOklch(hex);
     if (!oklch) continue;
 
-    seen.add(normalized);
-    colors.push({
-      name: `Color ${colors.length + 1}`,
-      hex: normalized,
-    });
+    seen.add(hex);
+    colors.push({ name: `Color ${colors.length + 1}`, hex });
+  }
+
+  // Pass 2: Extract rgb(), hsl(), oklch() functional notation
+  const funcPattern = /(?:rgb|hsl|oklch)a?\s*\([^)]+\)/gi;
+  const funcMatches = text.match(funcPattern) || [];
+
+  for (const raw of funcMatches) {
+    const hex = resolveToHex(raw);
+    if (!hex) continue;
+    if (seen.has(hex)) continue;
+
+    const oklch = hexToOklch(hex);
+    if (!oklch) continue;
+
+    seen.add(hex);
+    colors.push({ name: `Color ${colors.length + 1}`, hex });
   }
 
   return colors;
 }
 
 function parseCssVars(text: string): ParsedColor[] {
-  // Match: --name-step: #hex;
-  const varPattern = /--([\w-]+)\s*:\s*(#[0-9a-fA-F]{3,8})\b/g;
+  // Match any CSS custom property: --name: value
+  const varPattern = /--([\w-]+)\s*:\s*([^;}\n]+)/g;
 
-  // Group by family
-  const families = new Map<string, { step: number; hex: string }[]>();
+  // Collect all parsed vars
+  const familyMap = new Map<string, { step: number; hex: string }[]>();
+  const standalone: { varName: string; hex: string }[] = [];
 
   let match;
   while ((match = varPattern.exec(text)) !== null) {
-    const parsed = extractFamilyAndStep(`--${match[1]}`);
-    if (!parsed) continue;
+    const varName = match[1];
+    const rawValue = match[2].trim();
 
-    const { family, step } = parsed;
-    if (!families.has(family)) families.set(family, []);
-    families.get(family)!.push({ step, hex: match[2] });
+    // Resolve value to hex (handles #hex, rgb(), hsl(), oklch(), etc.)
+    const hex = resolveToHex(rawValue);
+    if (!hex) continue;
+
+    // Validate
+    const oklch = hexToOklch(hex);
+    if (!oklch) continue;
+
+    // Check if it has a family + step number
+    const familyStep = extractFamilyAndStep(`--${varName}`);
+
+    if (familyStep) {
+      const { family, step } = familyStep;
+      if (!familyMap.has(family)) familyMap.set(family, []);
+      familyMap.get(family)!.push({ step, hex });
+    } else {
+      // Standalone var without step number (--primary, --brand-red, etc.)
+      standalone.push({ varName, hex });
+    }
   }
 
-  // For each family, pick step 500 (or closest)
   const colors: ParsedColor[] = [];
-  for (const [slug, steps] of families) {
+
+  // Process families: pick step closest to 500
+  for (const [slug, steps] of familyMap) {
     const best = pickBestStep(steps);
     if (!best) continue;
 
-    // Validate hex
-    const oklch = hexToOklch(best.hex);
-    if (!oklch) continue;
-
     const name = titleCase(cleanFamilySlug(slug));
     colors.push({ name, hex: best.hex.toLowerCase() });
+  }
+
+  // Process standalone vars: use the variable name directly
+  for (const { varName, hex } of standalone) {
+    // Clean up the variable name for display
+    const cleaned = varName
+      .replace(/^(color-|c-|brand-|clr-|col-)/, "")
+      .replace(/^(tw-|css-)/, "");
+    const name = titleCase(cleaned);
+    colors.push({ name, hex: hex.toLowerCase() });
   }
 
   return colors;
 }
 
 function parseTailwindTheme(text: string): ParsedColor[] {
-  // Match: --color-name-step: oklch(L C H);
+  // Match: --name-step: oklch(L C H); — handles both decimal (0.657) and percent (65.7%) lightness
   const varPattern =
-    /--([\w-]+)\s*:\s*oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/g;
+    /--([\w-]+)\s*:\s*oklch\(\s*([\d.]+%?)\s+([\d.]+)\s+([\d.]+)\s*\)/g;
 
-  // Group by family — collect C and H (they're constant per family)
-  const families = new Map<
+  // Group by family
+  const familyMap = new Map<
     string,
     { step: number; l: number; c: number; h: number }[]
   >();
+  const standalone: { varName: string; l: number; c: number; h: number }[] = [];
 
   let match;
   while ((match = varPattern.exec(text)) !== null) {
-    const parsed = extractFamilyAndStep(`--${match[1]}`);
-    if (!parsed) continue;
-
-    const { family, step } = parsed;
-    const l = parseFloat(match[2]);
+    const varName = match[1];
+    // Parse L — handle percent syntax (65.7% → 0.657) or decimal (0.657)
+    let l = parseFloat(match[2]);
+    if (match[2].endsWith("%")) {
+      l = l / 100;
+    }
     const c = parseFloat(match[3]);
     const h = parseFloat(match[4]);
 
     if (isNaN(l) || isNaN(c) || isNaN(h)) continue;
 
-    if (!families.has(family)) families.set(family, []);
-    families.get(family)!.push({ step, l, c, h });
+    // Check if it has a family + step number
+    const familyStep = extractFamilyAndStep(`--${varName}`);
+
+    if (familyStep) {
+      const { family, step } = familyStep;
+      if (!familyMap.has(family)) familyMap.set(family, []);
+      familyMap.get(family)!.push({ step, l, c, h });
+    } else {
+      // Standalone oklch var without step number
+      standalone.push({ varName, l, c, h });
+    }
   }
 
-  // For each family, use C and H from any step (they're constant), set L=0.5 for the source
   const colors: ParsedColor[] = [];
-  for (const [slug, steps] of families) {
-    if (steps.length === 0) continue;
 
-    // Use C and H from the first entry (they're the same across all steps)
+  // Process families: use C and H from any step, set L=0.5 for source
+  for (const [slug, steps] of familyMap) {
+    if (steps.length === 0) continue;
     const { c, h } = steps[0];
     const hex = oklchToHex(0.5, c, h);
-
     const name = titleCase(cleanFamilySlug(slug));
+    colors.push({ name, hex });
+  }
+
+  // Process standalone oklch vars
+  for (const { varName, l, c, h } of standalone) {
+    const hex = oklchToHex(l, c, h);
+    const cleaned = varName
+      .replace(/^(color-|c-|brand-|clr-|col-)/, "")
+      .replace(/^(tw-|css-)/, "");
+    const name = titleCase(cleaned);
     colors.push({ name, hex });
   }
 
@@ -234,10 +308,20 @@ function parseDesignTokens(text: string): ParsedColor[] {
     if (!value || typeof value !== "object" || Array.isArray(value)) continue;
     const family = value as Record<string, unknown>;
 
-    // Skip metadata keys
-    if ("$value" in family && typeof family.$value === "string") continue;
+    // Case 1: Flat token — top-level key has $value directly
+    // e.g. { "primary": { "$value": "#e11d48", "$type": "color" } }
+    if ("$value" in family && typeof family.$value === "string") {
+      const hex = resolveToHex(family.$value);
+      if (!hex) continue;
+      const oklch = hexToOklch(hex);
+      if (!oklch) continue;
+      const name = titleCase(cleanFamilySlug(key));
+      colors.push({ name, hex: hex.toLowerCase() });
+      continue;
+    }
 
-    // Find the 500 step, or closest to 500
+    // Case 2: Nested token — sub-keys are step numbers with $value
+    // e.g. { "c-yellow": { "500": { "$value": "#984d00" }, ... } }
     const stepEntries: { step: number; hex: string }[] = [];
     for (const [stepKey, stepVal] of Object.entries(family)) {
       if (stepKey.startsWith("$")) continue; // skip $type, $description
@@ -248,9 +332,10 @@ function parseDesignTokens(text: string): ParsedColor[] {
         typeof stepVal === "object" &&
         "$value" in (stepVal as Record<string, unknown>)
       ) {
-        const hex = (stepVal as Record<string, unknown>).$value;
-        if (typeof hex === "string") {
-          stepEntries.push({ step, hex });
+        const rawHex = (stepVal as Record<string, unknown>).$value;
+        if (typeof rawHex === "string") {
+          const hex = resolveToHex(rawHex);
+          if (hex) stepEntries.push({ step, hex });
         }
       }
     }
@@ -258,7 +343,6 @@ function parseDesignTokens(text: string): ParsedColor[] {
     const best = pickBestStep(stepEntries);
     if (!best) continue;
 
-    // Validate hex
     const oklch = hexToOklch(best.hex);
     if (!oklch) continue;
 
@@ -282,6 +366,34 @@ function pickBestStep<T extends { step: number }>(entries: T[]): T | null {
     }
   }
   return best;
+}
+
+// ────────────────────────────────────────────
+// Error message helpers
+// ────────────────────────────────────────────
+
+function buildErrorMessage(text: string, format: Format): string {
+  // Detect what the user might have been trying to paste
+  const hints: string[] = [];
+
+  if (/\b(red|blue|green|orange|purple|pink|yellow|cyan|white|black)\b/i.test(text) && !/#|rgb|hsl/.test(text)) {
+    hints.push("CSS named colors (\"red\", \"blue\") aren't supported — use hex (#ff0000) or rgb() values.");
+  }
+
+  if (/\$[\w-]+\s*:/.test(text)) {
+    hints.push("SCSS/Sass variables detected — the hex values were extracted but names were lost. Try CSS custom properties (--name: #hex) instead.");
+  }
+
+  if (format === "css" && !/\d+/.test(text.replace(/#[0-9a-fA-F]+/g, ""))) {
+    // CSS vars detected but no step numbers and parsing failed
+    hints.push("CSS variables need a color value (hex, rgb, hsl). Check that each variable has a valid value.");
+  }
+
+  if (hints.length > 0) {
+    return hints[0];
+  }
+
+  return "No valid colors found. Supported formats: hex values (#ff6600), CSS variables (--name: #hex), rgb()/hsl() values, Tailwind @theme (oklch), or design tokens JSON.";
 }
 
 // ────────────────────────────────────────────
@@ -318,7 +430,7 @@ export function parseImportText(text: string): ParseResult {
       colors: [],
       format,
       truncated: false,
-      error: "No valid colors found. Try pasting hex values, CSS variables, Tailwind @theme, or design tokens JSON.",
+      error: buildErrorMessage(trimmed, format),
     };
   }
 
