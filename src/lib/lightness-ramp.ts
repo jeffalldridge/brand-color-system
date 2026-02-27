@@ -1,4 +1,4 @@
-import type { RampConfig, ShadeStep } from './types';
+import type { RampConfig, ShadeStep } from "./types";
 
 /** Convert RampConfig steps into the Map the engine expects. Always sorted dark→light. */
 export function generateLightnessRamp(config: RampConfig): Map<number, number> {

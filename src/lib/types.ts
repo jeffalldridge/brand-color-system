@@ -15,7 +15,7 @@ export interface OklchColor {
 
 export interface ShadeStep {
   step: number; // the "name" — e.g. 500, 200, etc.
-  l: number;    // OKLCH lightness value
+  l: number; // OKLCH lightness value
 }
 
 export interface Shade {
@@ -39,9 +39,9 @@ export interface ShadeFamily {
   closestStep: number;
 }
 
-export type TextOverlay = 'white' | 'black' | 'both';
+export type TextOverlay = "white" | "black" | "both";
 
-export type GamutTarget = 'srgb' | 'p3';
+export type GamutTarget = "srgb" | "p3";
 
 export interface RampConfig {
   steps: ShadeStep[]; // always sorted dark (high step#, low L) → light (low step#, high L)

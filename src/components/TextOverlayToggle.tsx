@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import type { TextOverlay } from '@/lib/types';
+import type { TextOverlay } from "@/lib/types";
 
 interface TextOverlayToggleProps {
   value: TextOverlay;
@@ -9,20 +9,30 @@ interface TextOverlayToggleProps {
 }
 
 const OPTIONS: { label: string; value: TextOverlay }[] = [
-  { label: 'White', value: 'white' },
-  { label: 'Black', value: 'black' },
-  { label: 'Both', value: 'both' },
+  { label: "White", value: "white" },
+  { label: "Black", value: "black" },
+  { label: "Both", value: "both" },
 ];
 
-export default function TextOverlayToggle({ value, bgIsLight, onChange }: TextOverlayToggleProps) {
-  const txt = bgIsLight ? 'text-black/80' : 'text-white/80';
-  const border = bgIsLight ? 'border-black/20' : 'border-white/20';
-  const activeClass = bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white';
-  const inactiveClass = bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70';
+export default function TextOverlayToggle({
+  value,
+  bgIsLight,
+  onChange,
+}: TextOverlayToggleProps) {
+  const txt = bgIsLight ? "text-black/80" : "text-white/80";
+  const border = bgIsLight ? "border-black/20" : "border-white/20";
+  const activeClass = bgIsLight
+    ? "bg-black/15 text-black"
+    : "bg-white/20 text-white";
+  const inactiveClass = bgIsLight
+    ? "bg-transparent text-black/50 hover:text-black/70"
+    : "bg-transparent text-white/50 hover:text-white/70";
 
   return (
     <div className="flex items-center gap-3">
-      <label className={`text-xs font-medium whitespace-nowrap ${txt}`}>Text Overlay</label>
+      <label className={`text-xs font-medium whitespace-nowrap ${txt}`}>
+        Text Overlay
+      </label>
       <div className={`flex rounded-md overflow-hidden border ${border}`}>
         {OPTIONS.map((opt) => (
           <button

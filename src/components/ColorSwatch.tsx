@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import type { Shade, TextOverlay } from '@/lib/types';
+import { memo } from "react";
+import type { Shade, TextOverlay } from "@/lib/types";
 
 interface ColorSwatchProps {
   shade: Shade;
@@ -14,17 +14,30 @@ interface ColorSwatchProps {
   gamutLabel?: string;
 }
 
-export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput, isExactInput, bgIsLight, showNearestOutline, showSwatchText, gamutLabel = 'sRGB' }: ColorSwatchProps) {
-  const showWhite = textOverlay === 'white' || textOverlay === 'both';
-  const showBlack = textOverlay === 'black' || textOverlay === 'both';
-  const autoColor = shade.contrastOnBlack > shade.contrastOnWhite ? '#000' : '#fff';
+export default memo(function ColorSwatch({
+  shade,
+  textOverlay,
+  isClosestToInput,
+  isExactInput,
+  bgIsLight,
+  showNearestOutline,
+  showSwatchText,
+  gamutLabel = "sRGB",
+}: ColorSwatchProps) {
+  const showWhite = textOverlay === "white" || textOverlay === "both";
+  const showBlack = textOverlay === "black" || textOverlay === "both";
+  const autoColor =
+    shade.contrastOnBlack > shade.contrastOnWhite ? "#000" : "#fff";
 
   // INPUT border uses a consistent color tied to page background, not per-swatch contrast
-  const inputRingColor = bgIsLight ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.9)';
+  const inputRingColor = bgIsLight
+    ? "rgba(0,0,0,0.8)"
+    : "rgba(255,255,255,0.9)";
 
-  const boxShadow = isClosestToInput && showNearestOutline
-    ? `inset 0 0 0 2.5px ${inputRingColor}`
-    : undefined;
+  const boxShadow =
+    isClosestToInput && showNearestOutline
+      ? `inset 0 0 0 2.5px ${inputRingColor}`
+      : undefined;
 
   return (
     <div
@@ -37,7 +50,10 @@ export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput,
       {showSwatchText && (
         <>
           <div className="flex items-center justify-between gap-0.5">
-            <span className="font-bold text-[11px]" style={{ color: autoColor }}>
+            <span
+              className="font-bold text-[11px]"
+              style={{ color: autoColor }}
+            >
               {shade.step}
             </span>
             <span className="flex items-center gap-0.5">
@@ -45,9 +61,13 @@ export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput,
                 <span
                   className="text-[7px] font-bold tracking-wider opacity-90"
                   style={{ color: autoColor }}
-                  title={isExactInput ? 'Exact input color' : 'Closest step to input color'}
+                  title={
+                    isExactInput
+                      ? "Exact input color"
+                      : "Closest step to input color"
+                  }
                 >
-                  {isExactInput ? 'INPUT' : 'NEAREST'}
+                  {isExactInput ? "INPUT" : "NEAREST"}
                 </span>
               )}
               {!shade.inGamut && (
@@ -62,20 +82,33 @@ export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput,
 
           <div className="space-y-0.5 flex-1 flex flex-col justify-center">
             {showWhite && (
-              <div className="flex justify-between items-center" style={{ color: '#ffffff' }}>
+              <div
+                className="flex justify-between items-center"
+                style={{ color: "#ffffff" }}
+              >
                 <span className="text-[10px] opacity-70">Aa</span>
-                <span className="font-medium">{shade.contrastOnWhite.toFixed(1)}</span>
+                <span className="font-medium">
+                  {shade.contrastOnWhite.toFixed(1)}
+                </span>
               </div>
             )}
             {showBlack && (
-              <div className="flex justify-between items-center" style={{ color: '#000000' }}>
+              <div
+                className="flex justify-between items-center"
+                style={{ color: "#000000" }}
+              >
                 <span className="text-[10px] opacity-70">Aa</span>
-                <span className="font-medium">{shade.contrastOnBlack.toFixed(1)}</span>
+                <span className="font-medium">
+                  {shade.contrastOnBlack.toFixed(1)}
+                </span>
               </div>
             )}
           </div>
 
-          <div className="text-[8px] opacity-60 truncate tracking-wide" style={{ color: autoColor }}>
+          <div
+            className="text-[8px] opacity-60 truncate tracking-wide"
+            style={{ color: autoColor }}
+          >
             {shade.hex}
           </div>
         </>

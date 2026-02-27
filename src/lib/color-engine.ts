@@ -6,19 +6,27 @@ import {
   oklchToCssString,
   oklchToRgbValues,
   isInGamut,
-} from './color-conversions';
-import { generateLightnessRamp } from './lightness-ramp';
-import { relativeLuminance, contrastRatio } from './contrast';
-import type { BrandColor, GamutTarget, OklchColor, RampConfig, Shade, ShadeFamily } from './types';
+} from "./color-conversions";
+import { generateLightnessRamp } from "./lightness-ramp";
+import { relativeLuminance, contrastRatio } from "./contrast";
+import type {
+  BrandColor,
+  GamutTarget,
+  OklchColor,
+  RampConfig,
+  Shade,
+  ShadeFamily,
+} from "./types";
 
 function applyAdjustments(base: OklchColor, brand: BrandColor): OklchColor {
   const h = (base.h + brand.hueShift + 360) % 360;
   // Chroma: multiplicative when base has chroma, additive fallback for achromatic inputs
   // so grayscale colors can gain saturation via the slider
   const shift = brand.saturationShift / 100;
-  const c = base.c > 0.005
-    ? Math.max(0, base.c * (1 + shift))
-    : Math.max(0, shift * 0.15); // additive: ±100% maps to ±0.15 chroma
+  const c =
+    base.c > 0.005
+      ? Math.max(0, base.c * (1 + shift))
+      : Math.max(0, shift * 0.15); // additive: ±100% maps to ±0.15 chroma
   const l = Math.max(0, Math.min(1, base.l + brand.lightnessShift));
   return { l, c, h };
 }
@@ -26,7 +34,7 @@ function applyAdjustments(base: OklchColor, brand: BrandColor): OklchColor {
 export function generateShadeFamily(
   brand: BrandColor,
   ramp: Map<number, number>,
-  gamut: GamutTarget = 'srgb',
+  gamut: GamutTarget = "srgb",
 ): ShadeFamily | null {
   const baseOklch = hexToOklch(brand.hex);
   if (!baseOklch) return null;
@@ -74,7 +82,7 @@ export function generateShadeFamily(
     // Perceptual distance in OKLCH: weight L heavily, include chroma and hue
     const dL = shade.oklch.l - adjusted.l;
     const dC = shade.oklch.c - adjusted.c;
-    const dH = (shade.oklch.h - adjusted.h + 540) % 360 - 180; // shortest arc
+    const dH = ((shade.oklch.h - adjusted.h + 540) % 360) - 180; // shortest arc
     const dist = Math.sqrt(dL * dL + dC * dC + (dH / 360) * (dH / 360));
     if (dist < closestDist) {
       closestDist = dist;
@@ -95,7 +103,7 @@ export function generateShadeFamily(
 export function generateAllFamilies(
   brandColors: BrandColor[],
   rampConfig: RampConfig,
-  gamut: GamutTarget = 'srgb',
+  gamut: GamutTarget = "srgb",
 ): ShadeFamily[] {
   const ramp = generateLightnessRamp(rampConfig);
 

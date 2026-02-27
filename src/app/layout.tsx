@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Brand Color Explorer",
-  description: "Dynamic OKLCH perceptually uniform shade generator with ASE export",
+  description:
+    "Dynamic OKLCH perceptually uniform shade generator with ASE export",
 };
 
 export default function RootLayout({
@@ -24,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

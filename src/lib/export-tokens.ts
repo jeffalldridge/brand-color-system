@@ -1,4 +1,4 @@
-import type { ShadeFamily } from './types';
+import type { ShadeFamily } from "./types";
 
 /**
  * Generate a W3C Design Tokens (DTCG) JSON file.
@@ -7,13 +7,13 @@ import type { ShadeFamily } from './types';
  */
 
 interface TokenValue {
-  $type: 'color';
+  $type: "color";
   $value: string;
   $extensions?: { oklch: { l: number; c: number; h: number } };
 }
 
 interface TokenGroup {
-  $type?: 'color';
+  $type?: "color";
   $description?: string;
   [key: string]: TokenValue | TokenGroup | string | undefined;
 }
@@ -23,13 +23,13 @@ export function generateDesignTokens(families: ShadeFamily[]): string {
 
   for (const family of families) {
     const group: TokenGroup = {
-      $type: 'color',
+      $type: "color",
       $description: `${family.brand.name} shade family`,
     };
 
     for (const shade of family.shades) {
       const token: TokenValue = {
-        $type: 'color',
+        $type: "color",
         $value: shade.hex.toLowerCase(),
         $extensions: {
           oklch: {
@@ -43,9 +43,9 @@ export function generateDesignTokens(families: ShadeFamily[]): string {
     }
 
     // Use a CSS-safe key: lowercase, hyphens for spaces
-    const key = family.brand.name.toLowerCase().replace(/\s+/g, '-');
+    const key = family.brand.name.toLowerCase().replace(/\s+/g, "-");
     root[key] = group;
   }
 
-  return JSON.stringify(root, null, 2) + '\n';
+  return JSON.stringify(root, null, 2) + "\n";
 }

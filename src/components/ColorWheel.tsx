@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import type { ShadeFamily } from '@/lib/types';
-import { oklchToHex } from '@/lib/color-conversions';
+import { useMemo } from "react";
+import type { ShadeFamily } from "@/lib/types";
+import { oklchToHex } from "@/lib/color-conversions";
 
 interface ColorWheelProps {
   families: ShadeFamily[];
@@ -15,15 +15,20 @@ const WHEEL_SIZE = 240;
 const SIZE = WHEEL_SIZE + PADDING * 2;
 const CX = SIZE / 2;
 const CY = SIZE / 2;
-const R_OUTER = WHEEL_SIZE / 2;       // 120
-const R_INNER = R_OUTER * 0.68;       // ~82
+const R_OUTER = WHEEL_SIZE / 2; // 120
+const R_INNER = R_OUTER * 0.68; // ~82
 const SEGMENTS = 72;
 const DEG_PER_SEG = 360 / SEGMENTS;
 const MAX_CHROMA = 0.37;
 const CHROMA_THRESHOLD = 0.01; // below this, color is achromatic — skip on wheel
 
 /** Convert polar coordinates to SVG cartesian. Hue 0 = top (12 o'clock). */
-function polar(cx: number, cy: number, r: number, deg: number): { x: number; y: number } {
+function polar(
+  cx: number,
+  cy: number,
+  r: number,
+  deg: number,
+): { x: number; y: number } {
   const rad = ((deg - 90) * Math.PI) / 180;
   return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
 }
@@ -40,8 +45,8 @@ function arcPath(startDeg: number, endDeg: number): string {
     `A ${R_OUTER} ${R_OUTER} 0 ${large} 1 ${oe.x} ${oe.y}`,
     `L ${ie.x} ${ie.y}`,
     `A ${R_INNER} ${R_INNER} 0 ${large} 0 ${is_.x} ${is_.y}`,
-    'Z',
-  ].join(' ');
+    "Z",
+  ].join(" ");
 }
 
 /** Map chroma to a visual radius within the ring band. */
@@ -55,17 +60,21 @@ function dotPos(h: number, c: number): { x: number; y: number } {
   return polar(CX, CY, chromaRadius(c), h);
 }
 
-type TextAnchor = 'start' | 'middle' | 'end';
+type TextAnchor = "start" | "middle" | "end";
 
 /** Compute label position and text-anchor based on hue angle. */
-function labelPos(h: number, c: number, nudge: number): { x: number; y: number; anchor: TextAnchor } {
+function labelPos(
+  h: number,
+  c: number,
+  nudge: number,
+): { x: number; y: number; anchor: TextAnchor } {
   const dotR = chromaRadius(c);
   const r = Math.max(dotR + 12, R_OUTER + 8) + nudge;
   const pt = polar(CX, CY, r, h);
   const norm = ((h % 360) + 360) % 360;
-  let anchor: TextAnchor = 'middle';
-  if (norm > 15 && norm < 165) anchor = 'start';
-  if (norm > 195 && norm < 345) anchor = 'end';
+  let anchor: TextAnchor = "middle";
+  if (norm > 15 && norm < 165) anchor = "start";
+  if (norm > 195 && norm < 345) anchor = "end";
   return { x: pt.x, y: pt.y, anchor };
 }
 
@@ -85,7 +94,7 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
 
   // Filter to families with meaningful chroma (skip achromatic)
   const chromaFamilies = useMemo(
-    () => families.filter(f => f.adjustedOklch.c >= CHROMA_THRESHOLD),
+    () => families.filter((f) => f.adjustedOklch.c >= CHROMA_THRESHOLD),
     [families],
   );
 
@@ -105,7 +114,9 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
       const adj = dotPos(family.adjustedOklch.h, family.adjustedOklch.c);
       // Only show source dot if base also has chroma
       const showSource = hasAdj && family.baseOklch.c >= CHROMA_THRESHOLD;
-      const src = showSource ? dotPos(family.baseOklch.h, family.baseOklch.c) : null;
+      const src = showSource
+        ? dotPos(family.baseOklch.h, family.baseOklch.c)
+        : null;
 
       // Nudge label outward if previous color's hue is within 25 degrees
       let nudge = 0;
@@ -115,16 +126,20 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
         if (delta < 25) nudge = 12;
       }
 
-      const label = labelPos(family.adjustedOklch.h, family.adjustedOklch.c, nudge);
+      const label = labelPos(
+        family.adjustedOklch.h,
+        family.adjustedOklch.c,
+        nudge,
+      );
 
       return { family, hasAdj, adj, src, label };
     });
   }, [chromaFamilies]);
 
-  const dotStroke = bgIsLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.7)';
-  const dimStroke = bgIsLight ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.3)';
-  const labelFill = bgIsLight ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.75)';
-  const centerFill = bgIsLight ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
+  const dotStroke = bgIsLight ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.7)";
+  const dimStroke = bgIsLight ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.3)";
+  const labelFill = bgIsLight ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.75)";
+  const centerFill = bgIsLight ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
 
   // Don't render if no chromatic colors
   if (colorData.length === 0) return null;
@@ -142,13 +157,19 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
 
         {/* Hue ring (72 arc segments) */}
         {ringSegments.map((seg, i) => (
-          <path key={i} d={seg.d} fill={seg.color} stroke={seg.color} strokeWidth={0.5} />
+          <path
+            key={i}
+            d={seg.d}
+            fill={seg.color}
+            stroke={seg.color}
+            strokeWidth={0.5}
+          />
         ))}
 
         {/* Connecting lines: source -> adjusted */}
         {colorData
-          .filter(d => d.src)
-          .map(d => (
+          .filter((d) => d.src)
+          .map((d) => (
             <line
               key={`line-${d.family.brand.id}`}
               x1={d.src!.x}
@@ -164,8 +185,8 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
 
         {/* Source dots (dimmed) */}
         {colorData
-          .filter(d => d.src)
-          .map(d => (
+          .filter((d) => d.src)
+          .map((d) => (
             <circle
               key={`src-${d.family.brand.id}`}
               cx={d.src!.x}
@@ -179,7 +200,7 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
           ))}
 
         {/* Adjusted dots */}
-        {colorData.map(d => (
+        {colorData.map((d) => (
           <circle
             key={`adj-${d.family.brand.id}`}
             cx={d.adj.x}
@@ -192,7 +213,7 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
         ))}
 
         {/* Labels */}
-        {colorData.map(d => (
+        {colorData.map((d) => (
           <text
             key={`label-${d.family.brand.id}`}
             x={d.label.x}
@@ -202,7 +223,7 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
             fill={labelFill}
             fontSize={9}
             fontWeight={600}
-            style={{ fontFamily: 'var(--font-geist-mono)' }}
+            style={{ fontFamily: "var(--font-geist-mono)" }}
           >
             {d.family.brand.name}
           </text>

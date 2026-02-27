@@ -1,9 +1,13 @@
-import type { ShadeFamily } from './types';
+import type { ShadeFamily } from "./types";
 
 // Converts a hex string to an array of 3 RGB values, scaled [0,1]
 function hexToRgb01(hex: string): [number, number, number] {
-  let h = hex.replace('#', '');
-  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  let h = hex.replace("#", "");
+  if (h.length === 3)
+    h = h
+      .split("")
+      .map((c) => c + c)
+      .join("");
 
   const r = parseInt(h.substring(0, 2), 16) / 255;
   const g = parseInt(h.substring(2, 4), 16) / 255;
@@ -53,7 +57,8 @@ export function generateAseFile(families: ShadeFamily[]): ArrayBuffer {
     // Color block data: string + model(4) + 3×float32(12) + type(2)
     for (const shade of family.shades) {
       numBlocks++;
-      totalDataLength += stringByteLen(aseColorName(family, shade)) + 4 + 12 + 2;
+      totalDataLength +=
+        stringByteLen(aseColorName(family, shade)) + 4 + 12 + 2;
     }
 
     // Group end block (no data)
@@ -62,7 +67,7 @@ export function generateAseFile(families: ShadeFamily[]): ArrayBuffer {
 
   // ASE Header = 12 bytes (Signature 4 + Version 4 + NumBlocks 4)
   // Each block header = 6 bytes (Type 2 + Length 4)
-  const bufferSize = 12 + (numBlocks * 6) + totalDataLength;
+  const bufferSize = 12 + numBlocks * 6 + totalDataLength;
   const buffer = new ArrayBuffer(bufferSize);
   const view = new DataView(buffer);
 
@@ -76,27 +81,34 @@ export function generateAseFile(families: ShadeFamily[]): ArrayBuffer {
   view.setUint8(offset++, 0x46); // F
 
   // Version 1.0
-  view.setUint16(offset, 1, false); offset += 2;
-  view.setUint16(offset, 0, false); offset += 2;
+  view.setUint16(offset, 1, false);
+  offset += 2;
+  view.setUint16(offset, 0, false);
+  offset += 2;
 
   // Number of blocks
-  view.setUint32(offset, numBlocks, false); offset += 4;
+  view.setUint32(offset, numBlocks, false);
+  offset += 4;
 
   // --- BLOCKS ---
   for (const family of families) {
     // Group Start Block (0xC001)
-    view.setUint16(offset, 0xC001, false); offset += 2;
-    view.setUint32(offset, stringByteLen(family.brand.name), false); offset += 4;
+    view.setUint16(offset, 0xc001, false);
+    offset += 2;
+    view.setUint32(offset, stringByteLen(family.brand.name), false);
+    offset += 4;
     offset = writeString(view, offset, family.brand.name);
 
     // Color entries
     for (const shade of family.shades) {
       // Color Block (0x0001)
-      view.setUint16(offset, 0x0001, false); offset += 2;
+      view.setUint16(offset, 0x0001, false);
+      offset += 2;
 
       const colorName = aseColorName(family, shade);
       const colorDataLength = stringByteLen(colorName) + 4 + 12 + 2;
-      view.setUint32(offset, colorDataLength, false); offset += 4;
+      view.setUint32(offset, colorDataLength, false);
+      offset += 4;
 
       // Color name
       offset = writeString(view, offset, colorName);
@@ -109,17 +121,23 @@ export function generateAseFile(families: ShadeFamily[]): ArrayBuffer {
 
       // Color values (3 × float32, [0,1])
       const [r, g, b] = hexToRgb01(shade.hex);
-      view.setFloat32(offset, r, false); offset += 4;
-      view.setFloat32(offset, g, false); offset += 4;
-      view.setFloat32(offset, b, false); offset += 4;
+      view.setFloat32(offset, r, false);
+      offset += 4;
+      view.setFloat32(offset, g, false);
+      offset += 4;
+      view.setFloat32(offset, b, false);
+      offset += 4;
 
       // Color type (0 = Global, 1 = Spot, 2 = Normal)
-      view.setUint16(offset, 0, false); offset += 2;
+      view.setUint16(offset, 0, false);
+      offset += 2;
     }
 
     // Group End Block (0xC002)
-    view.setUint16(offset, 0xC002, false); offset += 2;
-    view.setUint32(offset, 0, false); offset += 4;
+    view.setUint16(offset, 0xc002, false);
+    offset += 2;
+    view.setUint32(offset, 0, false);
+    offset += 4;
   }
 
   return buffer;

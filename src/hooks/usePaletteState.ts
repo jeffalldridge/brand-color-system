@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import { useReducer, useMemo, useEffect, useState } from 'react';
-import { DEFAULT_BRAND_COLORS, DEFAULT_RAMP_CONFIG } from '@/lib/brand-colors';
-import { generateAllFamilies, sortFamilies } from '@/lib/color-engine';
-import type { BrandColor, GamutTarget, TextOverlay, RampConfig, ShadeFamily } from '@/lib/types';
+import { useReducer, useMemo, useEffect, useState } from "react";
+import { DEFAULT_BRAND_COLORS, DEFAULT_RAMP_CONFIG } from "@/lib/brand-colors";
+import { generateAllFamilies, sortFamilies } from "@/lib/color-engine";
+import type {
+  BrandColor,
+  GamutTarget,
+  TextOverlay,
+  RampConfig,
+  ShadeFamily,
+} from "@/lib/types";
 
 export interface PaletteState {
   brandColors: BrandColor[];
@@ -18,112 +24,123 @@ export interface PaletteState {
 }
 
 export type PaletteAction =
-  | { type: 'UPDATE_COLOR'; index: number; hex: string }
-  | { type: 'UPDATE_NAME'; index: number; name: string }
-  | { type: 'UPDATE_ADJUSTMENTS'; index: number; adjustments: Partial<Pick<BrandColor, 'hueShift' | 'saturationShift' | 'lightnessShift'>> }
-  | { type: 'REORDER_COLOR'; fromIndex: number; toIndex: number }
-  | { type: 'ADD_COLOR' }
-  | { type: 'REMOVE_COLOR'; index: number }
-  | { type: 'SET_BACKGROUND'; value: number }
-  | { type: 'SET_TEXT_OVERLAY'; mode: TextOverlay }
-  | { type: 'SET_SHOW_NEAREST_OUTLINE'; value: boolean }
-  | { type: 'SET_SHOW_SWATCH_TEXT'; value: boolean }
-  | { type: 'SET_GAP_SIZE'; value: number }
-  | { type: 'SET_SORT_BY_HUE'; value: boolean }
-  | { type: 'SET_GAMUT_TARGET'; value: GamutTarget }
-  | { type: 'SET_BRAND_ORDER'; ids: string[] }
-  | { type: 'RESET' }
-  | { type: 'HYDRATE'; payload: PaletteState };
+  | { type: "UPDATE_COLOR"; index: number; hex: string }
+  | { type: "UPDATE_NAME"; index: number; name: string }
+  | {
+      type: "UPDATE_ADJUSTMENTS";
+      index: number;
+      adjustments: Partial<
+        Pick<BrandColor, "hueShift" | "saturationShift" | "lightnessShift">
+      >;
+    }
+  | { type: "REORDER_COLOR"; fromIndex: number; toIndex: number }
+  | { type: "ADD_COLOR" }
+  | { type: "REMOVE_COLOR"; index: number }
+  | { type: "SET_BACKGROUND"; value: number }
+  | { type: "SET_TEXT_OVERLAY"; mode: TextOverlay }
+  | { type: "SET_SHOW_NEAREST_OUTLINE"; value: boolean }
+  | { type: "SET_SHOW_SWATCH_TEXT"; value: boolean }
+  | { type: "SET_GAP_SIZE"; value: number }
+  | { type: "SET_SORT_BY_HUE"; value: boolean }
+  | { type: "SET_GAMUT_TARGET"; value: GamutTarget }
+  | { type: "SET_BRAND_ORDER"; ids: string[] }
+  | { type: "RESET" }
+  | { type: "HYDRATE"; payload: PaletteState };
 
 function grayFromSlider(value: number): string {
   const v = Math.round((value / 100) * 255);
-  const hex = v.toString(16).padStart(2, '0');
+  const hex = v.toString(16).padStart(2, "0");
   return `#${hex}${hex}${hex}`;
 }
 
 const initialState: PaletteState = {
   brandColors: DEFAULT_BRAND_COLORS,
-  backgroundColor: '#333333',
-  textOverlay: 'both',
+  backgroundColor: "#333333",
+  textOverlay: "both",
   rampConfig: DEFAULT_RAMP_CONFIG,
   showNearestOutline: false,
   showSwatchText: true,
   gapSize: 8,
   sortByHue: true,
-  gamutTarget: 'srgb',
+  gamutTarget: "srgb",
 };
 
 function reducer(state: PaletteState, action: PaletteAction): PaletteState {
   switch (action.type) {
-    case 'UPDATE_COLOR': {
+    case "UPDATE_COLOR": {
       const updated = [...state.brandColors];
       updated[action.index] = { ...updated[action.index], hex: action.hex };
       return { ...state, brandColors: updated };
     }
-    case 'UPDATE_NAME': {
+    case "UPDATE_NAME": {
       const updated = [...state.brandColors];
       updated[action.index] = { ...updated[action.index], name: action.name };
       return { ...state, brandColors: updated };
     }
-    case 'UPDATE_ADJUSTMENTS': {
+    case "UPDATE_ADJUSTMENTS": {
       const updated = [...state.brandColors];
-      updated[action.index] = { ...updated[action.index], ...action.adjustments };
+      updated[action.index] = {
+        ...updated[action.index],
+        ...action.adjustments,
+      };
       return { ...state, brandColors: updated };
     }
-    case 'REORDER_COLOR': {
+    case "REORDER_COLOR": {
       const updated = [...state.brandColors];
       const [moved] = updated.splice(action.fromIndex, 1);
       updated.splice(action.toIndex, 0, moved);
       return { ...state, brandColors: updated };
     }
-    case 'ADD_COLOR': {
+    case "ADD_COLOR": {
       const id = `color-${Date.now()}`;
       const newColor: BrandColor = {
         id,
-        name: 'New Color',
-        hex: '#6366f1',
+        name: "New Color",
+        hex: "#6366f1",
         hueShift: 0,
         saturationShift: 0,
         lightnessShift: 0,
       };
       return { ...state, brandColors: [...state.brandColors, newColor] };
     }
-    case 'REMOVE_COLOR': {
+    case "REMOVE_COLOR": {
       if (state.brandColors.length <= 1) return state;
       const updated = [...state.brandColors];
       updated.splice(action.index, 1);
       return { ...state, brandColors: updated };
     }
-    case 'SET_BACKGROUND':
+    case "SET_BACKGROUND":
       return { ...state, backgroundColor: grayFromSlider(action.value) };
-    case 'SET_TEXT_OVERLAY':
+    case "SET_TEXT_OVERLAY":
       return { ...state, textOverlay: action.mode };
-    case 'SET_SHOW_NEAREST_OUTLINE':
+    case "SET_SHOW_NEAREST_OUTLINE":
       return { ...state, showNearestOutline: action.value };
-    case 'SET_SHOW_SWATCH_TEXT':
+    case "SET_SHOW_SWATCH_TEXT":
       return { ...state, showSwatchText: action.value };
-    case 'SET_GAP_SIZE':
+    case "SET_GAP_SIZE":
       return { ...state, gapSize: action.value };
-    case 'SET_SORT_BY_HUE':
+    case "SET_SORT_BY_HUE":
       return { ...state, sortByHue: action.value };
-    case 'SET_GAMUT_TARGET':
+    case "SET_GAMUT_TARGET":
       return { ...state, gamutTarget: action.value };
-    case 'SET_BRAND_ORDER': {
-      const idMap = new Map(state.brandColors.map(c => [c.id, c]));
-      const reordered = action.ids.map(id => idMap.get(id)).filter(Boolean) as BrandColor[];
+    case "SET_BRAND_ORDER": {
+      const idMap = new Map(state.brandColors.map((c) => [c.id, c]));
+      const reordered = action.ids
+        .map((id) => idMap.get(id))
+        .filter(Boolean) as BrandColor[];
       // Append any colors not in the provided list (safety)
       for (const c of state.brandColors) {
         if (!action.ids.includes(c.id)) reordered.push(c);
       }
       return { ...state, brandColors: reordered, sortByHue: false };
     }
-    case 'RESET':
+    case "RESET":
       return initialState;
-    case 'HYDRATE': {
+    case "HYDRATE": {
       // Migrate old compactView -> gapSize
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const p = action.payload as any;
-      if ('compactView' in p && !('gapSize' in p)) {
+      if ("compactView" in p && !("gapSize" in p)) {
         const { compactView, ...rest } = p;
         return { ...rest, gapSize: compactView ? 0 : 8 } as PaletteState;
       }
@@ -142,18 +159,18 @@ export function usePaletteState() {
   useEffect(() => {
     let hadSavedState = false;
     try {
-      const saved = localStorage.getItem('palette-state-v2');
+      const saved = localStorage.getItem("palette-state-v2");
       if (saved) {
         hadSavedState = true;
-        dispatch({ type: 'HYDRATE', payload: JSON.parse(saved) });
+        dispatch({ type: "HYDRATE", payload: JSON.parse(saved) });
       }
     } catch (e) {
-      console.error('Failed to load state from localStorage:', e);
+      console.error("Failed to load state from localStorage:", e);
     }
 
     // Auto-detect P3: if no saved state, default to P3 when the display supports it
-    if (!hadSavedState && window.matchMedia('(color-gamut: p3)').matches) {
-      dispatch({ type: 'SET_GAMUT_TARGET', value: 'p3' });
+    if (!hadSavedState && window.matchMedia("(color-gamut: p3)").matches) {
+      dispatch({ type: "SET_GAMUT_TARGET", value: "p3" });
     }
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -163,23 +180,27 @@ export function usePaletteState() {
   // Save to localStorage whenever state changes after hydration
   useEffect(() => {
     if (isHydrated) {
-      localStorage.setItem('palette-state-v2', JSON.stringify(state));
+      localStorage.setItem("palette-state-v2", JSON.stringify(state));
     }
   }, [state, isHydrated]);
 
   const families: ShadeFamily[] = useMemo(() => {
-    const all = generateAllFamilies(state.brandColors, state.rampConfig, state.gamutTarget);
+    const all = generateAllFamilies(
+      state.brandColors,
+      state.rampConfig,
+      state.gamutTarget,
+    );
     return state.sortByHue ? sortFamilies(all) : all;
   }, [state.brandColors, state.rampConfig, state.gamutTarget, state.sortByHue]);
 
   const bgSliderValue = useMemo(() => {
-    const hex = state.backgroundColor.replace('#', '');
+    const hex = state.backgroundColor.replace("#", "");
     const v = parseInt(hex.substring(0, 2), 16);
     return Math.round((v / 255) * 100);
   }, [state.backgroundColor]);
 
   const bgIsLight = useMemo(() => {
-    const hex = state.backgroundColor.replace('#', '');
+    const hex = state.backgroundColor.replace("#", "");
     const v = parseInt(hex.substring(0, 2), 16);
     return v > 140;
   }, [state.backgroundColor]);
