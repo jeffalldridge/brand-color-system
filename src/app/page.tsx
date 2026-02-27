@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { usePaletteState } from '@/hooks/usePaletteState';
 import BrandColorEditor from '@/components/BrandColorEditor';
 import ShadeGrid from '@/components/ShadeGrid';
@@ -12,6 +12,16 @@ export default function Home() {
   const { state, dispatch, families, bgSliderValue, bgIsLight } = usePaletteState();
 
   const [showHueMap, setShowHueMap] = useState(true);
+
+  const handleReorderRow = useCallback((fromId: string, toId: string) => {
+    const fromIndex = state.brandColors.findIndex(c => c.id === fromId);
+    const toIndex = state.brandColors.findIndex(c => c.id === toId);
+    if (fromIndex === -1 || toIndex === -1) return;
+    if (state.sortByHue) {
+      dispatch({ type: 'SET_SORT_BY_HUE', value: false });
+    }
+    dispatch({ type: 'REORDER_COLOR', fromIndex, toIndex });
+  }, [state.brandColors, state.sortByHue, dispatch]);
 
   return (
     <div className="min-h-screen min-w-[900px] transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
@@ -81,6 +91,7 @@ export default function Home() {
             showSwatchText={state.showSwatchText}
             gapSize={state.gapSize}
             gamutTarget={state.gamutTarget}
+            onReorderRow={handleReorderRow}
           />
         </section>
 
