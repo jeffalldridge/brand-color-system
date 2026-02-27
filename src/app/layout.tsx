@@ -37,8 +37,11 @@ export const metadata: Metadata = {
     "design system colors",
     "free color tool",
   ],
-  authors: [{ name: "Tent Studios", url: "https://tentstudios.com" }],
-  creator: "Tent Studios, LLC",
+  authors: [
+    { name: "Jeff Alldridge", url: "https://tentstudios.com" },
+    { name: "Tent Studios", url: "https://tentstudios.com" },
+  ],
+  creator: "Jeff Alldridge / Tent Studios, LLC",
   publisher: "Tent Studios, LLC",
   icons: {
     icon: [
@@ -95,6 +98,7 @@ const jsonLd = {
     "@type": "Organization",
     name: "Tent Studios, LLC",
     url: "https://tentstudios.com",
+    founder: { "@type": "Person", name: "Jeff Alldridge" },
   },
 };
 

@@ -50,7 +50,7 @@ export default function OutputSection({
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [expandedFamily, setExpandedFamily] = useState<string | null>(null);
 
-  const txt = bgIsLight ? "text-black/90" : "text-white/90";
+  const txt = bgIsLight ? "text-black/80" : "text-white/80";
   const txtMuted = bgIsLight ? "text-black/60" : "text-white/60";
   const txtDim = bgIsLight ? "text-black/50" : "text-white/50";
   const txtRow = bgIsLight ? "text-black/80" : "text-white/80";
@@ -92,13 +92,13 @@ export default function OutputSection({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className={`text-sm font-semibold ${txt}`}>Output Values</h2>
+        <h2 className={`text-xs font-semibold uppercase tracking-widest ${bgIsLight ? "text-black/60" : "text-white/60"}`}>Output Values</h2>
         <div className="flex gap-2 flex-wrap">
           <button
             onClick={() =>
               copyToClipboard(generateCssCustomProperties(families), "css")
             }
-            className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            className={`px-3 py-1 text-xs font-medium rounded-md border transition-colors ${btnBorder}`}
             title="Copy CSS custom properties"
           >
             {copiedKey === "css" ? "Copied!" : "CSS"}
@@ -107,7 +107,7 @@ export default function OutputSection({
             onClick={() =>
               copyToClipboard(generateTailwindTheme(families), "tw")
             }
-            className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            className={`px-3 py-1 text-xs font-medium rounded-md border transition-colors ${btnBorder}`}
             title="Copy Tailwind @theme"
           >
             {copiedKey === "tw" ? "Copied!" : "Tailwind"}
@@ -120,7 +120,7 @@ export default function OutputSection({
                 "application/json",
               )
             }
-            className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            className={`px-3 py-1 text-xs font-medium rounded-md border transition-colors ${btnBorder}`}
             title="W3C Design Tokens (DTCG) — Figma, Tokens Studio, Style Dictionary"
           >
             Tokens
@@ -130,7 +130,7 @@ export default function OutputSection({
             onClick={() =>
               downloadFile(generateAseFile(families), "brand-colors.ase")
             }
-            className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            className={`px-3 py-1 text-xs font-medium rounded-md border transition-colors ${btnBorder}`}
             title="Adobe Swatch Exchange — Illustrator, Photoshop, InDesign"
           >
             .ase
@@ -139,7 +139,7 @@ export default function OutputSection({
             onClick={() =>
               downloadFile(generateAcoFile(families), "brand-colors.aco")
             }
-            className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
+            className={`px-3 py-1 text-xs font-medium rounded-md border transition-colors ${btnBorder}`}
             title="Adobe Color Swatch — Photoshop"
           >
             .aco
@@ -363,14 +363,14 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className={`text-[10px] uppercase tracking-widest font-semibold ${txtMuted} ${bgIsLight ? "hover:text-black/80" : "hover:text-white/80"} transition-colors`}
+        className={`text-xs uppercase tracking-widest font-semibold ${txtMuted} ${bgIsLight ? "hover:text-black/80" : "hover:text-white/80"} transition-colors`}
       >
         {open ? "Hide" : "About this tool"}
       </button>
 
       {open && (
         <div
-          className={`mt-3 space-y-5 text-[11px] leading-relaxed ${txt} max-w-3xl`}
+          className={`mt-3 space-y-5 text-xs leading-relaxed ${txt} max-w-3xl`}
         >
           <Section title="What is this?" headingColor={headingColor}>
             Brand Color Explorer is a free tool by{" "}
@@ -599,7 +599,7 @@ function Section({
   return (
     <div>
       <h3
-        className={`text-[10px] uppercase tracking-widest font-semibold mb-1 ${headingColor}`}
+        className={`text-[11px] uppercase tracking-widest font-semibold mb-1 ${headingColor}`}
       >
         {title}
       </h3>
@@ -622,7 +622,7 @@ function Link({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`underline underline-offset-2 ${className}`}
+      className={`no-underline hover:underline underline-offset-2 ${className}`}
     >
       {children}
     </a>
@@ -631,7 +631,7 @@ function Link({
 
 function Code({ bg, children }: { bg: string; children: React.ReactNode }) {
   return (
-    <code className={`${bg} px-1 py-0.5 rounded text-[10px] font-mono`}>
+    <code className={`${bg} px-1 py-0.5 rounded text-[11px] font-mono`}>
       {children}
     </code>
   );

@@ -188,7 +188,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer
-          className={`text-center py-6 text-[11px] space-y-1 ${bgIsLight ? "text-black/40" : "text-white/40"}`}
+          className={`text-center py-6 text-xs space-y-1 ${bgIsLight ? "text-black/40" : "text-white/40"}`}
         >
           <p>
             A free tool by{" "}
@@ -196,7 +196,7 @@ export default function Home() {
               href="https://tentstudios.com"
               target="_blank"
               rel="noopener noreferrer"
-              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+              className={`font-semibold no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "text-black/50 hover:text-black/70" : "text-white/50 hover:text-white/70"}`}
             >
               Tent Studios, LLC
             </a>
@@ -207,7 +207,7 @@ export default function Home() {
               href="https://oklch.com"
               target="_blank"
               rel="noopener noreferrer"
-              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+              className={`no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
             >
               OKLCH
             </a>
@@ -216,7 +216,7 @@ export default function Home() {
               href="https://nextjs.org"
               target="_blank"
               rel="noopener noreferrer"
-              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+              className={`no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
             >
               Next.js
             </a>
@@ -225,7 +225,7 @@ export default function Home() {
               href="https://tailwindcss.com"
               target="_blank"
               rel="noopener noreferrer"
-              className={`underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+              className={`no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
             >
               Tailwind CSS
             </a>
