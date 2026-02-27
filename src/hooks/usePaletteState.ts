@@ -12,7 +12,7 @@ export interface PaletteState {
   rampConfig: RampConfig;
   showNearestOutline: boolean;
   showSwatchText: boolean;
-  compactView: boolean;
+  gapSize: number;
   sortByHue: boolean;
   gamutTarget: GamutTarget;
 }
@@ -28,7 +28,7 @@ export type PaletteAction =
   | { type: 'SET_TEXT_OVERLAY'; mode: TextOverlay }
   | { type: 'SET_SHOW_NEAREST_OUTLINE'; value: boolean }
   | { type: 'SET_SHOW_SWATCH_TEXT'; value: boolean }
-  | { type: 'SET_COMPACT_VIEW'; value: boolean }
+  | { type: 'SET_GAP_SIZE'; value: number }
   | { type: 'SET_SORT_BY_HUE'; value: boolean }
   | { type: 'SET_GAMUT_TARGET'; value: GamutTarget }
   | { type: 'RESET' }
@@ -45,9 +45,9 @@ const initialState: PaletteState = {
   backgroundColor: '#333333',
   textOverlay: 'both',
   rampConfig: DEFAULT_RAMP_CONFIG,
-  showNearestOutline: true,
+  showNearestOutline: false,
   showSwatchText: true,
-  compactView: false,
+  gapSize: 8,
   sortByHue: true,
   gamutTarget: 'srgb',
 };
@@ -101,16 +101,24 @@ function reducer(state: PaletteState, action: PaletteAction): PaletteState {
       return { ...state, showNearestOutline: action.value };
     case 'SET_SHOW_SWATCH_TEXT':
       return { ...state, showSwatchText: action.value };
-    case 'SET_COMPACT_VIEW':
-      return { ...state, compactView: action.value };
+    case 'SET_GAP_SIZE':
+      return { ...state, gapSize: action.value };
     case 'SET_SORT_BY_HUE':
       return { ...state, sortByHue: action.value };
     case 'SET_GAMUT_TARGET':
       return { ...state, gamutTarget: action.value };
     case 'RESET':
       return initialState;
-    case 'HYDRATE':
+    case 'HYDRATE': {
+      // Migrate old compactView -> gapSize
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const p = action.payload as any;
+      if ('compactView' in p && !('gapSize' in p)) {
+        const { compactView, ...rest } = p;
+        return { ...rest, gapSize: compactView ? 0 : 8 } as PaletteState;
+      }
       return action.payload;
+    }
     default:
       return state;
   }

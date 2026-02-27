@@ -79,7 +79,7 @@ export default function Home() {
             rampConfig={state.rampConfig}
             showNearestOutline={state.showNearestOutline}
             showSwatchText={state.showSwatchText}
-            compactView={state.compactView}
+            gapSize={state.gapSize}
             gamutTarget={state.gamutTarget}
           />
         </section>

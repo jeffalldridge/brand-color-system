@@ -11,12 +11,12 @@ interface ShadeGridProps {
   rampConfig: RampConfig;
   showNearestOutline: boolean;
   showSwatchText: boolean;
-  compactView: boolean;
+  gapSize: number;
   gamutTarget: GamutTarget;
 }
 
 export default function ShadeGrid({
-  families, textOverlay, bgIsLight, rampConfig, showNearestOutline, showSwatchText, compactView, gamutTarget,
+  families, textOverlay, bgIsLight, rampConfig, showNearestOutline, showSwatchText, gapSize, gamutTarget,
 }: ShadeGridProps) {
 
   if (families.length === 0) return null;
@@ -57,7 +57,7 @@ export default function ShadeGrid({
       <div className="h-4" />
 
       {/* Color rows */}
-      <div className={compactView ? 'relative' : 'space-y-1 relative'}>
+      <div className="relative flex flex-col" style={{ gap: `${gapSize}px` }}>
         {families.map((family) => (
           <div
             key={family.brand.id}
@@ -72,14 +72,14 @@ export default function ShadeGrid({
               </span>
             </div>
             <div
-              className={`flex-1 grid ${compactView ? 'gap-0' : 'gap-1'}`}
-              style={{ gridTemplateColumns: `repeat(${numShades}, minmax(0, 1fr))` }}
+              className="flex-1 grid"
+              style={{ gridTemplateColumns: `repeat(${numShades}, minmax(0, 1fr))`, gap: `${gapSize}px` }}
             >
               {family.shades.map((shade) => {
                 const isClosest = shade.step === family.closestStep;
                 const isExact = isClosest && shade.hex.toLowerCase() === family.adjustedHex.toLowerCase();
                 return (
-                  <div key={shade.step} className={compactView ? 'overflow-hidden relative' : 'rounded-md overflow-hidden relative'}>
+                  <div key={shade.step} className={`overflow-hidden relative ${gapSize > 0 ? 'rounded-md' : ''}`}>
                     <ColorSwatch
                       shade={shade}
                       textOverlay={textOverlay}

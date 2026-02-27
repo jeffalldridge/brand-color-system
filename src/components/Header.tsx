@@ -32,7 +32,7 @@ export default function Header({
     return (
         <header className={`sticky top-0 z-20 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? 'bg-white/70 border-black/15' : 'bg-black/60 border-white/15'}`}>
             <div className="max-w-[1800px] mx-auto px-6 py-4">
-                    {/* Row 1: Title + badge | Background + Text Overlay */}
+                {/* Row 1: Title + badge | Background slider + Reset */}
                 <div className="flex items-center justify-between gap-4">
                     <h1 className={`text-lg font-bold tracking-tight flex items-center gap-2 ${bgIsLight ? 'text-black' : 'text-white'}`}>
                         Brand Color System
@@ -43,74 +43,94 @@ export default function Header({
                             {displayGamut}
                         </span>
                     </h1>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4">
                         <BackgroundSlider
                             value={bgSliderValue}
                             bgIsLight={bgIsLight}
                             onChange={(v) => dispatch({ type: 'SET_BACKGROUND', value: v })}
                         />
-                        <TextOverlayToggle
-                            value={state.textOverlay}
-                            bgIsLight={bgIsLight}
-                            onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
-                        />
+                        <button
+                            onClick={() => {
+                                if (window.confirm('Are you sure you want to reset the entire palette and ramp configuration to default?')) {
+                                    dispatch({ type: 'RESET' });
+                                }
+                            }}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-md border border-transparent transition-all shrink-0 ${bgIsLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-red-950/30'}`}
+                            title="Reset entire palette to default"
+                        >
+                            Reset
+                        </button>
                     </div>
                 </div>
 
-                {/* Row 2: Gamut toggle | View toggles | Reset */}
-                <div className="flex items-center justify-between gap-4 mt-3">
-                    <div className="flex items-center gap-4 flex-wrap">
-                        {/* Gamut target toggle */}
-                        <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
-                            {(['srgb', 'p3'] as const).map((g) => (
-                                <button
-                                    key={g}
-                                    onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
-                                    title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
-                                    className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
-                                        ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
-                                        : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
-                                        }`}
-                                >
-                                    {g === 'srgb' ? 'sRGB' : 'P3'}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* View toggles */}
-                        <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
-                            {([
-                                { label: 'Nearest Input', title: 'Show outline ring on the shade closest to each color\'s original hex', active: state.showNearestOutline, action: () => dispatch({ type: 'SET_SHOW_NEAREST_OUTLINE', value: !state.showNearestOutline }) },
-                                { label: 'Labels', title: 'Show step numbers, contrast ratios, and hex values on swatches', active: state.showSwatchText, action: () => dispatch({ type: 'SET_SHOW_SWATCH_TEXT', value: !state.showSwatchText }) },
-                                { label: 'Compact', title: 'Remove gaps, rounded corners, and shadows for flush color comparison', active: state.compactView, action: () => dispatch({ type: 'SET_COMPACT_VIEW', value: !state.compactView }) },
-                                { label: 'Sort by Hue', title: 'Sort shade rows by hue angle instead of source order', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
-                            ] as const).map((toggle) => (
-                                <button
-                                    key={toggle.label}
-                                    onClick={toggle.action}
-                                    title={toggle.title}
-                                    className={`px-3 py-1 text-xs font-medium transition-colors ${toggle.active
-                                        ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
-                                        : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
-                                        }`}
-                                >
-                                    {toggle.label}
-                                </button>
-                            ))}
-                        </div>
+                {/* Row 2: Gamut + View toggles + Text Overlay + Gap */}
+                <div className="flex items-center gap-4 flex-wrap mt-3">
+                    {/* Gamut target toggle */}
+                    <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                        {(['srgb', 'p3'] as const).map((g) => (
+                            <button
+                                key={g}
+                                onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
+                                title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
+                                className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
+                                    ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                    : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                    }`}
+                            >
+                                {g === 'srgb' ? 'sRGB' : 'P3'}
+                            </button>
+                        ))}
                     </div>
 
-                    <button
-                        onClick={() => {
-                            if (window.confirm('Are you sure you want to reset the entire palette and ramp configuration to default?')) {
-                                dispatch({ type: 'RESET' });
-                            }
-                        }}
-                        className={`px-3 py-1.5 text-xs font-medium rounded-md border border-transparent transition-all shrink-0 ${bgIsLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-red-950/30'}`}
-                        title="Reset entire palette to default"
-                    >
-                        Reset
-                    </button>
+                    {/* View toggles */}
+                    <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                        {([
+                            { label: 'Nearest Input', title: 'Show outline ring on the shade closest to each color\'s original hex', active: state.showNearestOutline, action: () => dispatch({ type: 'SET_SHOW_NEAREST_OUTLINE', value: !state.showNearestOutline }) },
+                            { label: 'Labels', title: 'Show step numbers, contrast ratios, and hex values on swatches', active: state.showSwatchText, action: () => dispatch({ type: 'SET_SHOW_SWATCH_TEXT', value: !state.showSwatchText }) },
+                            { label: 'Sort by Hue', title: 'Sort shade rows by hue angle instead of source order', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
+                        ] as const).map((toggle) => (
+                            <button
+                                key={toggle.label}
+                                onClick={toggle.action}
+                                title={toggle.title}
+                                className={`px-3 py-1 text-xs font-medium transition-colors ${toggle.active
+                                    ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                    : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                    }`}
+                            >
+                                {toggle.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Text overlay */}
+                    <TextOverlayToggle
+                        value={state.textOverlay}
+                        bgIsLight={bgIsLight}
+                        onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
+                    />
+
+                    {/* Gap size control */}
+                    <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                        {([
+                            { label: 'Flush', value: 0, title: 'No gaps between swatches' },
+                            { label: 'Tight', value: 4, title: '4px gaps between swatches' },
+                            { label: 'Normal', value: 8, title: '8px gaps — see background between swatches' },
+                            { label: 'Wide', value: 16, title: '16px gaps — more background visible' },
+                        ] as const).map((opt) => (
+                            <button
+                                key={opt.value}
+                                onClick={() => dispatch({ type: 'SET_GAP_SIZE', value: opt.value })}
+                                title={opt.title}
+                                className={`px-3 py-1 text-xs font-medium transition-colors ${state.gapSize === opt.value
+                                    ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                    : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                    }`}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </header>
