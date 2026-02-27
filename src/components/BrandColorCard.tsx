@@ -49,21 +49,22 @@ export default function BrandColorCard({
     isDragging,
   } = useSortable({ id: color.id });
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: transform
-      ? `translate3d(${transform.x}px, ${transform.y}px, 0) scaleX(${transform.scaleX}) scaleY(${transform.scaleY})`
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
     transition,
-    zIndex: isDragging ? 10 : 1,
+    zIndex: isDragging ? 10 : undefined,
     boxShadow: isDragging ? "0 10px 25px -5px rgba(0, 0, 0, 0.5)" : undefined,
     opacity: isDragging ? 0.9 : 1,
+    position: "relative",
   };
 
   const txtMuted = bgIsLight ? "text-black/60" : "text-white/60";
   const txtVal = bgIsLight ? "text-black/70" : "text-white/70";
   const cardBg = bgIsLight
-    ? "bg-white/70 border border-black/[0.12] hover:border-black/25"
-    : "bg-black/50 border border-white/[0.15] hover:border-white/30";
+    ? `bg-white/70 border border-black/[0.12] ${isDragging ? "" : "hover:border-black/25"}`
+    : `bg-black/50 border border-white/[0.15] ${isDragging ? "" : "hover:border-white/30"}`;
 
   // Slider thumb/track colors driven by CSS custom properties (see globals.css .custom-range)
   const sliderVars = {
@@ -75,7 +76,7 @@ export default function BrandColorCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`rounded-xl overflow-hidden transition-[box-shadow,border-color] duration-200 ${cardBg} shadow-sm group`}
+      className={`rounded-xl overflow-hidden ${isDragging ? "" : "transition-[box-shadow,border-color] duration-200"} ${cardBg} shadow-sm group`}
     >
       {/* Top Bar - Color display area and drag handle */}
       <div
@@ -168,6 +169,33 @@ export default function BrandColorCard({
           />
 
           <div className="flex items-center gap-1 shrink-0">
+            {/* Remove */}
+            {canRemove && (
+              <button
+                onClick={() => onRemove(index)}
+                className={`flex items-center justify-center w-6 h-6 rounded transition-colors ${
+                  bgIsLight
+                    ? "text-black/25 hover:bg-red-500/10 hover:text-red-500"
+                    : "text-white/25 hover:bg-red-500/15 hover:text-red-400"
+                }`}
+                title="Remove this color"
+                aria-label="Remove color"
+              >
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            )}
             {/* Adjust Toggle */}
             <button
               onClick={() => setShowAdjustmentsLocal(!showAdjustmentsLocal)}
@@ -395,18 +423,6 @@ export default function BrandColorCard({
           </div>
         )}
 
-        {/* Footer: Remove */}
-        {canRemove && (
-          <div className="px-1.5 pb-1.5">
-            <button
-              onClick={() => onRemove(index)}
-              className="w-full py-1 text-[9px] uppercase tracking-wider font-bold text-red-500/50 hover:text-red-500 hover:bg-red-500/10 rounded transition-colors"
-              title="Remove this color"
-            >
-              Remove
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
