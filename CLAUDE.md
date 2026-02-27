@@ -40,7 +40,8 @@ Push to GitHub → Vercel auto-deploys. No env vars needed. Static export.
 ## _INBOX / _PROCESSED Workflow
 - **`_INBOX/`** — Drop reference material, design specs, or notes here for the next session to incorporate.
 - **`_PROCESSED/`** — Dump removed/superseded content here during cleanup sweeps. Safe to delete once reviewed. Use dated filenames (e.g. `cleanup-2026-02-27.md`).
-- Both folders are committable (not gitignored). This gives a clear audit trail of what was removed and a staging area for new material.
+- **Any time files need to be removed** from the project, move them to `_PROCESSED/` instead of deleting outright. This preserves an audit trail and lets you review before permanent deletion.
+- Both folders use `.gitkeep` so they're tracked even when empty.
 
 ## Project Structure
 ```
