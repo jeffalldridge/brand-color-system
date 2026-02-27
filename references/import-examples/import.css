@@ -1,0 +1,98 @@
+:root {
+  --c-yellow-950: #020000;
+  --c-yellow-900: #0b0100;
+  --c-yellow-800: #2a0c00;
+  --c-yellow-700: #4c2000;
+  --c-yellow-600: #713600;
+  --c-yellow-500: #984d00;
+  --c-yellow-400: #c16500;
+  --c-yellow-300: #ec7f00;
+  --c-yellow-200: #ff9a00;
+  --c-yellow-100: #ffcf82;
+  --c-yellow-50: #ffe6b9;
+
+  --c-orange-950: #030000;
+  --c-orange-900: #100000;
+  --c-orange-800: #330000;
+  --c-orange-700: #5a0c00;
+  --c-orange-600: #841d00;
+  --c-orange-500: #b12e00;
+  --c-orange-400: #e04100;
+  --c-orange-300: #ff5c00;
+  --c-orange-200: #ff934a;
+  --c-orange-100: #ffcba7;
+  --c-orange-50: #ffe3cd;
+
+  --c-red-950: #040000;
+  --c-red-900: #130000;
+  --c-red-800: #3a0000;
+  --c-red-700: #670000;
+  --c-red-600: #970000;
+  --c-red-500: #c2000b;
+  --c-red-400: #e72931;
+  --c-red-300: #ff5350;
+  --c-red-200: #ff8d83;
+  --c-red-100: #ffc7bf;
+  --c-red-50: #ffe1db;
+
+  --c-tone-950: #000001;
+  --c-tone-900: #030305;
+  --c-tone-800: #14161a;
+  --c-tone-700: #2c2e32;
+  --c-tone-600: #45484c;
+  --c-tone-500: #616368;
+  --c-tone-400: #7e8085;
+  --c-tone-300: #9c9ea3;
+  --c-tone-200: #bbbec3;
+  --c-tone-100: #dbdee3;
+  --c-tone-50: #eceff4;
+
+  --c-blue-950: #00000a;
+  --c-blue-900: #000023;
+  --c-blue-800: #000c46;
+  --c-blue-700: #0d2964;
+  --c-blue-600: #264482;
+  --c-blue-500: #4161a1;
+  --c-blue-400: #5d7fc2;
+  --c-blue-300: #7a9ee3;
+  --c-blue-200: #98beff;
+  --c-blue-100: #c4dfff;
+  --c-blue-50: #deefff;
+
+  --c-purple-950: #010006;
+  --c-purple-900: #07001a;
+  --c-purple-800: #200049;
+  --c-purple-700: #3d0078;
+  --c-purple-600: #572298;
+  --c-purple-500: #7243b9;
+  --c-purple-400: #8f62da;
+  --c-purple-300: #ad82fd;
+  --c-purple-200: #caa6ff;
+  --c-purple-100: #e5d2ff;
+  --c-purple-50: #f2e7ff;
+
+  --c-teal-950: #000101;
+  --c-teal-900: #000606;
+  --c-teal-800: #001e1f;
+  --c-teal-700: #003a3b;
+  --c-teal-600: #005657;
+  --c-teal-500: #007373;
+  --c-teal-400: #299191;
+  --c-teal-300: #4eb0b0;
+  --c-teal-200: #70d0d0;
+  --c-teal-100: #91f1f0;
+  --c-teal-50: #a2ffff;
+
+  --c-green-950: #000100;
+  --c-green-900: #000700;
+  --c-green-800: #002100;
+  --c-green-700: #003f00;
+  --c-green-600: #005c12;
+  --c-green-500: #007931;
+  --c-green-400: #27984e;
+  --c-green-300: #4db86c;
+  --c-green-200: #6fd88a;
+  --c-green-100: #91faa9;
+  --c-green-50: #acffbf;
+
+}

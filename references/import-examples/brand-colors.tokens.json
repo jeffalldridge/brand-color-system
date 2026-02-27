@@ -1,0 +1,1002 @@
+{
+  "c-yellow": {
+    "50": {
+      "$type": "color",
+      "$value": "#ffe6b9",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#ffcf82",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#ff9a00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#ec7f00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#c16500",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#984d00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#713600",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#4c2000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#2a0c00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#0b0100",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#020000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.265,
+          "h": 67.1
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-yellow shade family"
+  },
+  "c-orange": {
+    "50": {
+      "$type": "color",
+      "$value": "#ffe3cd",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#ffcba7",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#ff934a",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#ff5c00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#e04100",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#b12e00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#841d00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#5a0c00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#330000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#100000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#030000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.233,
+          "h": 46.1
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-orange shade family"
+  },
+  "c-red": {
+    "50": {
+      "$type": "color",
+      "$value": "#ffe1db",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#ffc7bf",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#ff8d83",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#ff5350",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#e72931",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#c2000b",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#970000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#670000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#3a0000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#130000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#040000",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.222,
+          "h": 25.6
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-red shade family"
+  },
+  "c-tone": {
+    "50": {
+      "$type": "color",
+      "$value": "#eceff4",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#dbdee3",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#bbbec3",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#9c9ea3",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#7e8085",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#616368",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#45484c",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#2c2e32",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#14161a",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#030305",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#000001",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.008,
+          "h": 263
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-tone shade family"
+  },
+  "c-blue": {
+    "50": {
+      "$type": "color",
+      "$value": "#deefff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#c4dfff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#98beff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#7a9ee3",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#5d7fc2",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#4161a1",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#264482",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#0d2964",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#000c46",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#000023",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#00000a",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.11,
+          "h": 262.9
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-blue shade family"
+  },
+  "c-purple": {
+    "50": {
+      "$type": "color",
+      "$value": "#f2e7ff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#e5d2ff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#caa6ff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#ad82fd",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#8f62da",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#7243b9",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#572298",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#3d0078",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#200049",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#07001a",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#010006",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.178,
+          "h": 298
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-purple shade family"
+  },
+  "c-teal": {
+    "50": {
+      "$type": "color",
+      "$value": "#a2ffff",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#91f1f0",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#70d0d0",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#4eb0b0",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#299191",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#007373",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#005657",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#003a3b",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#001e1f",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#000606",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#000101",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.091,
+          "h": 194.7
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-teal shade family"
+  },
+  "c-green": {
+    "50": {
+      "$type": "color",
+      "$value": "#acffbf",
+      "$extensions": {
+        "oklch": {
+          "l": 0.95,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": "#91faa9",
+      "$extensions": {
+        "oklch": {
+          "l": 0.9,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": "#6fd88a",
+      "$extensions": {
+        "oklch": {
+          "l": 0.8,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": "#4db86c",
+      "$extensions": {
+        "oklch": {
+          "l": 0.7,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": "#27984e",
+      "$extensions": {
+        "oklch": {
+          "l": 0.6,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": "#007931",
+      "$extensions": {
+        "oklch": {
+          "l": 0.5,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": "#005c12",
+      "$extensions": {
+        "oklch": {
+          "l": 0.4,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": "#003f00",
+      "$extensions": {
+        "oklch": {
+          "l": 0.3,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": "#002100",
+      "$extensions": {
+        "oklch": {
+          "l": 0.2,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": "#000700",
+      "$extensions": {
+        "oklch": {
+          "l": 0.1,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "950": {
+      "$type": "color",
+      "$value": "#000100",
+      "$extensions": {
+        "oklch": {
+          "l": 0.05,
+          "c": 0.148,
+          "h": 150.2
+        }
+      }
+    },
+    "$type": "color",
+    "$description": "c-green shade family"
+  }
+}
