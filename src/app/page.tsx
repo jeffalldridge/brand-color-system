@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useState } from 'react';
 import { usePaletteState } from '@/hooks/usePaletteState';
 import BrandColorEditor from '@/components/BrandColorEditor';
 import ShadeGrid from '@/components/ShadeGrid';
@@ -12,39 +12,6 @@ export default function Home() {
   const { state, dispatch, families, bgSliderValue, bgIsLight } = usePaletteState();
 
   const [showHueMap, setShowHueMap] = useState(false);
-  const [hueMapWidth, setHueMapWidth] = useState(280);
-  const dividerRef = useRef<HTMLDivElement>(null);
-
-  const MIN_WHEEL = 180;
-  const MAX_WHEEL = 500;
-  const MIN_CARDS = 600;
-
-  const handleDividerPointerDown = useCallback((e: React.PointerEvent) => {
-    e.preventDefault();
-    const startX = e.clientX;
-    const startWidth = hueMapWidth;
-    const container = dividerRef.current?.parentElement;
-    const containerWidth = container?.clientWidth ?? 1200;
-
-    const onMove = (ev: PointerEvent) => {
-      const delta = ev.clientX - startX;
-      const maxAllowed = Math.min(MAX_WHEEL, containerWidth - MIN_CARDS);
-      const next = Math.max(MIN_WHEEL, Math.min(maxAllowed, startWidth + delta));
-      setHueMapWidth(next);
-    };
-
-    const onUp = () => {
-      document.removeEventListener('pointermove', onMove);
-      document.removeEventListener('pointerup', onUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    };
-
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    document.addEventListener('pointermove', onMove);
-    document.addEventListener('pointerup', onUp);
-  }, [hueMapWidth]);
 
   return (
     <div className="min-h-screen transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
@@ -76,22 +43,11 @@ export default function Home() {
           </div>
           <div className="flex items-start">
             {showHueMap && (
-              <>
-                <div className="shrink-0 hidden lg:flex lg:items-center lg:justify-center" style={{ width: hueMapWidth }}>
-                  <ColorWheel families={families} bgIsLight={bgIsLight} />
-                </div>
-                {/* Drag divider */}
-                <div
-                  ref={dividerRef}
-                  onPointerDown={handleDividerPointerDown}
-                  className={`hidden lg:flex shrink-0 w-3 self-stretch items-center justify-center cursor-col-resize group`}
-                  title="Drag to resize"
-                >
-                  <div className={`w-px h-full transition-colors ${bgIsLight ? 'bg-black/10 group-hover:bg-black/25 group-active:bg-black/40' : 'bg-white/10 group-hover:bg-white/25 group-active:bg-white/40'}`} />
-                </div>
-              </>
+              <div className="shrink-0 w-[280px] hidden lg:flex lg:items-center lg:justify-center">
+                <ColorWheel families={families} bgIsLight={bgIsLight} />
+              </div>
             )}
-            <div className="flex-1" style={{ minWidth: MIN_CARDS }}>
+            <div className="flex-1 min-w-0">
               <BrandColorEditor
                 brandColors={state.brandColors}
                 families={families}
@@ -124,7 +80,7 @@ export default function Home() {
             showNearestOutline={state.showNearestOutline}
             showSwatchText={state.showSwatchText}
             compactView={state.compactView}
-            sortByHue={state.sortByHue}
+            gamutTarget={state.gamutTarget}
           />
         </section>
 
@@ -136,7 +92,7 @@ export default function Home() {
             borderColor: bgIsLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
           }}
         >
-          <OutputSection families={families} bgIsLight={bgIsLight} sortByHue={state.sortByHue} />
+          <OutputSection families={families} bgIsLight={bgIsLight} />
         </section>
       </main>
     </div>

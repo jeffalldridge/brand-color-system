@@ -2,7 +2,7 @@
 
 import { useReducer, useMemo, useEffect, useState } from 'react';
 import { DEFAULT_BRAND_COLORS, DEFAULT_RAMP_CONFIG } from '@/lib/brand-colors';
-import { generateAllFamilies } from '@/lib/color-engine';
+import { generateAllFamilies, sortFamilies } from '@/lib/color-engine';
 import type { BrandColor, GamutTarget, TextOverlay, RampConfig, ShadeFamily } from '@/lib/types';
 
 export interface PaletteState {
@@ -141,10 +141,10 @@ export function usePaletteState() {
     }
   }, [state, isHydrated]);
 
-  const families: ShadeFamily[] = useMemo(
-    () => generateAllFamilies(state.brandColors, state.rampConfig, state.gamutTarget),
-    [state.brandColors, state.rampConfig, state.gamutTarget],
-  );
+  const families: ShadeFamily[] = useMemo(() => {
+    const all = generateAllFamilies(state.brandColors, state.rampConfig, state.gamutTarget);
+    return state.sortByHue ? sortFamilies(all) : all;
+  }, [state.brandColors, state.rampConfig, state.gamutTarget, state.sortByHue]);
 
   const bgSliderValue = useMemo(() => {
     const hex = state.backgroundColor.replace('#', '');

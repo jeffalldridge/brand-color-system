@@ -16,6 +16,7 @@ import {
   sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import BrandColorCard from './BrandColorCard';
 
 interface BrandColorEditorProps {
   brandColors: BrandColor[];
@@ -28,8 +29,6 @@ interface BrandColorEditorProps {
   onAddColor: () => void;
   onRemoveColor: (index: number) => void;
 }
-
-import BrandColorCard from './BrandColorCard';
 
 export default function BrandColorEditor({ brandColors, families, bgIsLight, onColorChange, onNameChange, onAdjustmentsChange, onReorder, onAddColor, onRemoveColor }: BrandColorEditorProps) {
 

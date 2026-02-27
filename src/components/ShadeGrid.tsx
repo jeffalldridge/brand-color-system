@@ -1,8 +1,7 @@
 'use client';
 
-import type { ShadeFamily, TextOverlay, RampConfig } from '@/lib/types';
+import type { GamutTarget, ShadeFamily, TextOverlay, RampConfig } from '@/lib/types';
 import { sortedSteps } from '@/lib/lightness-ramp';
-import { sortFamilies } from '@/lib/color-engine';
 import ColorSwatch from './ColorSwatch';
 
 interface ShadeGridProps {
@@ -13,11 +12,11 @@ interface ShadeGridProps {
   showNearestOutline: boolean;
   showSwatchText: boolean;
   compactView: boolean;
-  sortByHue: boolean;
+  gamutTarget: GamutTarget;
 }
 
 export default function ShadeGrid({
-  families, textOverlay, bgIsLight, rampConfig, showNearestOutline, showSwatchText, compactView, sortByHue,
+  families, textOverlay, bgIsLight, rampConfig, showNearestOutline, showSwatchText, compactView, gamutTarget,
 }: ShadeGridProps) {
 
   if (families.length === 0) return null;
@@ -28,9 +27,7 @@ export default function ShadeGrid({
 
   const txt = bgIsLight ? 'text-black/80' : 'text-white/80';
   const txtMuted = bgIsLight ? 'text-black/60' : 'text-white/60';
-
-  // Filter and sort families
-  const sortedFamilies = sortByHue ? sortFamilies(families) : families;
+  const gamutLabel = gamutTarget === 'p3' ? 'P3' : 'sRGB';
 
   return (
     <div className="pt-4">
@@ -61,7 +58,7 @@ export default function ShadeGrid({
 
       {/* Color rows */}
       <div className={compactView ? 'relative' : 'space-y-1 relative'}>
-        {sortedFamilies.map((family) => (
+        {families.map((family) => (
           <div
             key={family.brand.id}
             className="flex items-stretch group"
@@ -91,6 +88,7 @@ export default function ShadeGrid({
                       bgIsLight={bgIsLight}
                       showNearestOutline={showNearestOutline}
                       showSwatchText={showSwatchText}
+                      gamutLabel={gamutLabel}
                     />
                   </div>
                 );

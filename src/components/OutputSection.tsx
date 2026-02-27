@@ -5,12 +5,10 @@ import type { ShadeFamily } from '@/lib/types';
 import { generateAseFile } from '@/lib/export-ase';
 import { generateAcoFile } from '@/lib/export-aco';
 import { generateDesignTokens } from '@/lib/export-tokens';
-import { sortFamilies } from '@/lib/color-engine';
 
 interface OutputSectionProps {
   families: ShadeFamily[];
   bgIsLight: boolean;
-  sortByHue: boolean;
 }
 
 function slugify(name: string): string {
@@ -43,11 +41,9 @@ function generateTailwindTheme(families: ShadeFamily[]): string {
   return lines.join('\n');
 }
 
-export default function OutputSection({ families, bgIsLight, sortByHue }: OutputSectionProps) {
+export default function OutputSection({ families, bgIsLight }: OutputSectionProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [expandedFamily, setExpandedFamily] = useState<string | null>(null);
-
-  const displayFamilies = sortByHue ? sortFamilies(families) : families;
 
   const txt = bgIsLight ? 'text-black/90' : 'text-white/90';
   const txtMuted = bgIsLight ? 'text-black/60' : 'text-white/60';
@@ -86,19 +82,19 @@ export default function OutputSection({ families, bgIsLight, sortByHue }: Output
         <h2 className={`text-sm font-semibold ${txt}`}>Output Values</h2>
         <div className="flex gap-2 flex-wrap">
           <button
-            onClick={() => copyToClipboard(generateCssCustomProperties(displayFamilies), 'css')}
+            onClick={() => copyToClipboard(generateCssCustomProperties(families), 'css')}
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
           >
             {copiedKey === 'css' ? 'Copied!' : 'CSS'}
           </button>
           <button
-            onClick={() => copyToClipboard(generateTailwindTheme(displayFamilies), 'tw')}
+            onClick={() => copyToClipboard(generateTailwindTheme(families), 'tw')}
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
           >
             {copiedKey === 'tw' ? 'Copied!' : 'Tailwind'}
           </button>
           <button
-            onClick={() => downloadFile(generateDesignTokens(displayFamilies), 'brand-colors.tokens.json', 'application/json')}
+            onClick={() => downloadFile(generateDesignTokens(families), 'brand-colors.tokens.json', 'application/json')}
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
             title="W3C Design Tokens (DTCG) — Figma, Tokens Studio, Style Dictionary"
           >
@@ -106,14 +102,14 @@ export default function OutputSection({ families, bgIsLight, sortByHue }: Output
           </button>
           <span className={`self-center text-[9px] ${txtDim}`}>|</span>
           <button
-            onClick={() => downloadFile(generateAseFile(displayFamilies), 'brand-colors.ase')}
+            onClick={() => downloadFile(generateAseFile(families), 'brand-colors.ase')}
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
             title="Adobe Swatch Exchange — Illustrator, Photoshop, InDesign"
           >
             .ase
           </button>
           <button
-            onClick={() => downloadFile(generateAcoFile(displayFamilies), 'brand-colors.aco')}
+            onClick={() => downloadFile(generateAcoFile(families), 'brand-colors.aco')}
             className={`px-3 py-1 text-xs rounded border transition-colors ${btnBorder}`}
             title="Adobe Color Swatch — Photoshop"
           >
@@ -123,7 +119,7 @@ export default function OutputSection({ families, bgIsLight, sortByHue }: Output
       </div>
 
       <div className="space-y-1">
-        {displayFamilies.map((family) => {
+        {families.map((family) => {
           const isExpanded = expandedFamily === family.brand.id;
           return (
             <div key={family.brand.id}>

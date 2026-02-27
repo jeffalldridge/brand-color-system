@@ -4,7 +4,6 @@ import { useSyncExternalStore } from 'react';
 import type { PaletteState, PaletteAction } from '@/hooks/usePaletteState';
 import BackgroundSlider from './BackgroundSlider';
 import TextOverlayToggle from './TextOverlayToggle';
-import GlobalSettingsDropdown from './GlobalSettingsDropdown';
 
 interface HeaderProps {
     state: PaletteState;
@@ -78,6 +77,7 @@ export default function Header({
                                 { label: 'Nearest Input', title: 'Show outline ring on the shade closest to each color\'s original hex', active: state.showNearestOutline, action: () => dispatch({ type: 'SET_SHOW_NEAREST_OUTLINE', value: !state.showNearestOutline }) },
                                 { label: 'Labels', title: 'Show step numbers, contrast ratios, and hex values on swatches', active: state.showSwatchText, action: () => dispatch({ type: 'SET_SHOW_SWATCH_TEXT', value: !state.showSwatchText }) },
                                 { label: 'Compact', title: 'Remove gaps, rounded corners, and shadows for flush color comparison', active: state.compactView, action: () => dispatch({ type: 'SET_COMPACT_VIEW', value: !state.compactView }) },
+                                { label: 'Sort by Hue', title: 'Sort shade rows by hue angle instead of source order', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
                             ] as const).map((toggle) => (
                                 <button
                                     key={toggle.label}
@@ -93,7 +93,6 @@ export default function Header({
                             ))}
                         </div>
 
-                        <GlobalSettingsDropdown state={state} dispatch={dispatch} bgIsLight={bgIsLight} />
                         <button
                             onClick={() => {
                                 if (window.confirm('Are you sure you want to reset the entire palette and ramp configuration to default?')) {

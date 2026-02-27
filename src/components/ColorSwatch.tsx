@@ -11,9 +11,10 @@ interface ColorSwatchProps {
   bgIsLight: boolean;
   showNearestOutline: boolean;
   showSwatchText: boolean;
+  gamutLabel?: string;
 }
 
-export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput, isExactInput, bgIsLight, showNearestOutline, showSwatchText }: ColorSwatchProps) {
+export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput, isExactInput, bgIsLight, showNearestOutline, showSwatchText, gamutLabel = 'sRGB' }: ColorSwatchProps) {
   const showWhite = textOverlay === 'white' || textOverlay === 'both';
   const showBlack = textOverlay === 'black' || textOverlay === 'both';
   const autoColor = shade.contrastOnBlack > shade.contrastOnWhite ? '#000' : '#fff';
@@ -51,7 +52,7 @@ export default memo(function ColorSwatch({ shade, textOverlay, isClosestToInput,
               )}
               {!shade.inGamut && (
                 <span
-                  title="Gamut-mapped to sRGB"
+                  title={`Gamut-mapped to ${gamutLabel}`}
                   className="inline-block w-1.5 h-1.5 rounded-full ml-0.5 opacity-40"
                   style={{ backgroundColor: autoColor }}
                 />
