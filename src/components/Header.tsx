@@ -32,7 +32,8 @@ export default function Header({
     return (
         <header className={`sticky top-0 z-20 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? 'bg-white/70 border-black/15' : 'bg-black/60 border-white/15'}`}>
             <div className="max-w-[1800px] mx-auto px-6 py-4">
-                <div className="flex items-center justify-between flex-wrap gap-4">
+                    {/* Row 1: Title + badge | Background + Text Overlay */}
+                <div className="flex items-center justify-between gap-4">
                     <h1 className={`text-lg font-bold tracking-tight flex items-center gap-2 ${bgIsLight ? 'text-black' : 'text-white'}`}>
                         Brand Color System
                         <span
@@ -42,7 +43,7 @@ export default function Header({
                             {displayGamut}
                         </span>
                     </h1>
-                    <div className="flex items-center gap-6 flex-wrap">
+                    <div className="flex items-center gap-6">
                         <BackgroundSlider
                             value={bgSliderValue}
                             bgIsLight={bgIsLight}
@@ -53,7 +54,12 @@ export default function Header({
                             bgIsLight={bgIsLight}
                             onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
                         />
+                    </div>
+                </div>
 
+                {/* Row 2: Gamut toggle | View toggles | Reset */}
+                <div className="flex items-center justify-between gap-4 mt-3">
+                    <div className="flex items-center gap-4 flex-wrap">
                         {/* Gamut target toggle */}
                         <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
                             {(['srgb', 'p3'] as const).map((g) => (
@@ -92,19 +98,19 @@ export default function Header({
                                 </button>
                             ))}
                         </div>
-
-                        <button
-                            onClick={() => {
-                                if (window.confirm('Are you sure you want to reset the entire palette and ramp configuration to default?')) {
-                                    dispatch({ type: 'RESET' });
-                                }
-                            }}
-                            className={`px-3 py-1.5 text-xs font-medium rounded-md border border-transparent transition-all ${bgIsLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-red-950/30'}`}
-                            title="Reset entire palette to default"
-                        >
-                            Reset
-                        </button>
                     </div>
+
+                    <button
+                        onClick={() => {
+                            if (window.confirm('Are you sure you want to reset the entire palette and ramp configuration to default?')) {
+                                dispatch({ type: 'RESET' });
+                            }
+                        }}
+                        className={`px-3 py-1.5 text-xs font-medium rounded-md border border-transparent transition-all shrink-0 ${bgIsLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-red-950/30'}`}
+                        title="Reset entire palette to default"
+                    >
+                        Reset
+                    </button>
                 </div>
             </div>
         </header>

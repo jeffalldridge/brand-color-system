@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { ShadeFamily } from '@/lib/types';
+import type { GamutTarget, ShadeFamily } from '@/lib/types';
 import { generateAseFile } from '@/lib/export-ase';
 import { generateAcoFile } from '@/lib/export-aco';
 import { generateDesignTokens } from '@/lib/export-tokens';
@@ -9,6 +9,7 @@ import { generateDesignTokens } from '@/lib/export-tokens';
 interface OutputSectionProps {
   families: ShadeFamily[];
   bgIsLight: boolean;
+  gamutTarget: GamutTarget;
 }
 
 function slugify(name: string): string {
@@ -41,7 +42,7 @@ function generateTailwindTheme(families: ShadeFamily[]): string {
   return lines.join('\n');
 }
 
-export default function OutputSection({ families, bgIsLight }: OutputSectionProps) {
+export default function OutputSection({ families, bgIsLight, gamutTarget }: OutputSectionProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [expandedFamily, setExpandedFamily] = useState<string | null>(null);
 
@@ -193,9 +194,9 @@ export default function OutputSection({ families, bgIsLight }: OutputSectionProp
                           </td>
                           <td className="py-1">
                             {shade.inGamut ? (
-                              <span className="text-green-500/60">sRGB</span>
+                              <span className="text-green-500/60">{gamutTarget === 'p3' ? 'P3' : 'sRGB'}</span>
                             ) : (
-                              <span className={`${bgIsLight ? 'text-black/40' : 'text-white/40'}`} title="Color was outside sRGB and has been gamut-mapped">mapped</span>
+                              <span className={`${bgIsLight ? 'text-black/40' : 'text-white/40'}`} title={`Color was outside ${gamutTarget === 'p3' ? 'P3' : 'sRGB'} and has been gamut-mapped`}>mapped</span>
                             )}
                           </td>
                         </tr>

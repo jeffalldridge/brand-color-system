@@ -30,7 +30,7 @@ export default function ShadeGrid({
   const gamutLabel = gamutTarget === 'p3' ? 'P3' : 'sRGB';
 
   return (
-    <div className="pt-4">
+    <div className="pt-4 overflow-x-auto">
       {/* Column header labels */}
       <div className="flex items-end mb-4">
         <div className="w-24 shrink-0 pr-2 flex flex-col gap-2 pb-2">

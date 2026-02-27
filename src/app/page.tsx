@@ -11,10 +11,10 @@ import ColorWheel from '@/components/ColorWheel';
 export default function Home() {
   const { state, dispatch, families, bgSliderValue, bgIsLight } = usePaletteState();
 
-  const [showHueMap, setShowHueMap] = useState(false);
+  const [showHueMap, setShowHueMap] = useState(true);
 
   return (
-    <div className="min-h-screen transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
+    <div className="min-h-screen min-w-[900px] transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
       {/* Sticky controls header */}
       <Header
         state={state}
@@ -33,7 +33,7 @@ export default function Home() {
             <button
               onClick={() => setShowHueMap(v => !v)}
               title={showHueMap ? 'Hide hue map' : 'Show hue map'}
-              className={`px-2 py-0.5 text-[10px] font-medium rounded border transition-colors ${showHueMap
+              className={`hidden lg:inline-flex px-2 py-0.5 text-[10px] font-medium rounded border transition-colors ${showHueMap
                 ? (bgIsLight ? 'bg-black/10 border-black/20 text-black/70' : 'bg-white/15 border-white/20 text-white/70')
                 : (bgIsLight ? 'bg-transparent border-black/15 text-black/40 hover:text-black/60 hover:border-black/25' : 'bg-transparent border-white/15 text-white/40 hover:text-white/60 hover:border-white/25')
                 }`}
@@ -92,7 +92,7 @@ export default function Home() {
             borderColor: bgIsLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.12)',
           }}
         >
-          <OutputSection families={families} bgIsLight={bgIsLight} />
+          <OutputSection families={families} bgIsLight={bgIsLight} gamutTarget={state.gamutTarget} />
         </section>
       </main>
     </div>

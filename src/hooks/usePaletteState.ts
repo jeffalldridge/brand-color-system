@@ -120,16 +120,24 @@ export function usePaletteState() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount + auto-detect P3 gamut
   useEffect(() => {
+    let hadSavedState = false;
     try {
       const saved = localStorage.getItem('palette-state-v2');
       if (saved) {
+        hadSavedState = true;
         dispatch({ type: 'HYDRATE', payload: JSON.parse(saved) });
       }
     } catch (e) {
       console.error('Failed to load state from localStorage:', e);
     }
+
+    // Auto-detect P3: if no saved state, default to P3 when the display supports it
+    if (!hadSavedState && window.matchMedia('(color-gamut: p3)').matches) {
+      dispatch({ type: 'SET_GAMUT_TARGET', value: 'p3' });
+    }
+
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsHydrated(true);
   }, []);
