@@ -186,12 +186,13 @@ export default function ShadeGrid({
   const itemIds = families.map((f) => f.brand.id);
 
   return (
-    <div className="pt-4 overflow-x-auto">
+    <div className="pt-4">
       {/* Column header labels */}
-      <div className="flex items-end mb-4">
-        <div className="w-24 shrink-0 pr-2 flex flex-col gap-2 pb-2">
+      <div className="flex items-center mb-2">
+        <div className="w-24 shrink-0 pr-2">
           <span
-            className={`text-[10px] ${txtMuted} uppercase tracking-wider font-medium`}
+            className={`text-[10px] ${txtMuted} uppercase tracking-wider font-medium cursor-default`}
+            title="Tailwind shade numbers mapped to OKLCH lightness values (L)"
           >
             Shade
           </span>
@@ -205,23 +206,24 @@ export default function ShadeGrid({
           {sorted.map((s, sortedIdx) => (
             <div
               key={`${s.step}-${sortedIdx}`}
-              className="flex flex-col items-center px-1"
+              className="flex items-baseline justify-center whitespace-nowrap px-0.5 cursor-default"
+              title={`Step ${s.step} — OKLCH lightness ${s.l.toFixed(2)} (Tailwind shade number, dark → light)`}
             >
               <span
-                className={`text-sm font-bold font-mono ${txt} tracking-wide`}
+                className={`text-[11px] font-bold font-mono ${txt}`}
               >
                 {s.step}
               </span>
-              <span className={`text-[10px] font-mono mt-1 ${txtMuted}`}>
+              <span className={`text-[9px] font-mono ${txtMuted} mx-[2px]`}>
+                /
+              </span>
+              <span className={`text-[9px] font-mono ${txtMuted}`}>
                 {s.l.toFixed(2)}
               </span>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Gap between header and color rows */}
-      <div className="h-4" />
 
       {/* Color rows — sortable */}
       <DndContext
