@@ -34,21 +34,6 @@ export default function Header({
                         <h1 className={`text-lg font-bold tracking-tight ${bgIsLight ? 'text-black' : 'text-white'}`}>
                             Brand Color System
                         </h1>
-                        <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
-                            {(['srgb', 'p3'] as const).map((g) => (
-                                <button
-                                    key={g}
-                                    onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
-                                    title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
-                                    className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
-                                        ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
-                                        : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
-                                        }`}
-                                >
-                                    {g === 'srgb' ? 'sRGB' : 'P3'}
-                                </button>
-                            ))}
-                        </div>
                     </div>
                     <div className="flex items-center gap-4">
                         <BackgroundSlider
@@ -70,7 +55,7 @@ export default function Header({
                     </div>
                 </div>
 
-                {/* Row 2: Text Overlay | View toggles | Gap size */}
+                {/* Row 2: Text Overlay | View toggles | Gap size | ... | sRGB/P3 (right) */}
                 <div className="flex items-center gap-4 flex-wrap mt-3">
                     {/* Text overlay */}
                     <TextOverlayToggle
@@ -82,9 +67,9 @@ export default function Header({
                     {/* View toggles */}
                     <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
                         {([
+                            { label: 'Sort by Hue', title: 'Sort shade rows by hue angle instead of source order', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
                             { label: 'Nearest Input', title: 'Show outline ring on the shade closest to each color\'s original hex', active: state.showNearestOutline, action: () => dispatch({ type: 'SET_SHOW_NEAREST_OUTLINE', value: !state.showNearestOutline }) },
                             { label: 'Labels', title: 'Show step numbers, contrast ratios, and hex values on swatches', active: state.showSwatchText, action: () => dispatch({ type: 'SET_SHOW_SWATCH_TEXT', value: !state.showSwatchText }) },
-                            { label: 'Sort by Hue', title: 'Sort shade rows by hue angle instead of source order', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
                         ] as const).map((toggle) => (
                             <button
                                 key={toggle.label}
@@ -118,6 +103,26 @@ export default function Header({
                                     }`}
                             >
                                 {opt.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Spacer to push gamut toggle right */}
+                    <div className="flex-1" />
+
+                    {/* Gamut target */}
+                    <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                        {(['srgb', 'p3'] as const).map((g) => (
+                            <button
+                                key={g}
+                                onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
+                                title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
+                                className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
+                                    ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                    : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                    }`}
+                            >
+                                {g === 'srgb' ? 'sRGB' : 'P3'}
                             </button>
                         ))}
                     </div>
