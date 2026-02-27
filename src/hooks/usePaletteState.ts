@@ -31,6 +31,7 @@ export type PaletteAction =
   | { type: 'SET_GAP_SIZE'; value: number }
   | { type: 'SET_SORT_BY_HUE'; value: boolean }
   | { type: 'SET_GAMUT_TARGET'; value: GamutTarget }
+  | { type: 'SET_BRAND_ORDER'; ids: string[] }
   | { type: 'RESET' }
   | { type: 'HYDRATE'; payload: PaletteState };
 
@@ -107,6 +108,15 @@ function reducer(state: PaletteState, action: PaletteAction): PaletteState {
       return { ...state, sortByHue: action.value };
     case 'SET_GAMUT_TARGET':
       return { ...state, gamutTarget: action.value };
+    case 'SET_BRAND_ORDER': {
+      const idMap = new Map(state.brandColors.map(c => [c.id, c]));
+      const reordered = action.ids.map(id => idMap.get(id)).filter(Boolean) as BrandColor[];
+      // Append any colors not in the provided list (safety)
+      for (const c of state.brandColors) {
+        if (!action.ids.includes(c.id)) reordered.push(c);
+      }
+      return { ...state, brandColors: reordered, sortByHue: false };
+    }
     case 'RESET':
       return initialState;
     case 'HYDRATE': {

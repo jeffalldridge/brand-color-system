@@ -76,16 +76,24 @@ function SortableRow({
     >
       {/* Name column — drag handle */}
       <div
-        className="w-24 shrink-0 flex flex-col justify-center pr-3 py-1 cursor-grab active:cursor-grabbing select-none"
+        className={`w-24 shrink-0 flex items-center gap-1.5 pr-3 py-1 cursor-grab active:cursor-grabbing select-none rounded-md transition-colors ${bgIsLight ? 'hover:bg-black/[0.06]' : 'hover:bg-white/[0.06]'}`}
         {...attributes}
         {...listeners}
       >
-        <span className={`text-sm font-semibold ${txt} truncate transition-colors ${bgIsLight ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
-          {family.brand.name}
-        </span>
-        <span className={`text-[11px] font-mono tracking-wider ${txtMuted}`}>
-          {family.adjustedHex.toUpperCase()}
-        </span>
+        {/* Grip indicator */}
+        <div className={`flex flex-col gap-[3px] shrink-0 opacity-0 group-hover:opacity-40 transition-opacity`}>
+          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
+          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
+          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
+        </div>
+        <div className="flex flex-col min-w-0">
+          <span className={`text-sm font-semibold ${txt} truncate transition-colors ${bgIsLight ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
+            {family.brand.name}
+          </span>
+          <span className={`text-[11px] font-mono tracking-wider ${txtMuted}`}>
+            {family.adjustedHex.toUpperCase()}
+          </span>
+        </div>
       </div>
       {/* Swatch grid */}
       <div

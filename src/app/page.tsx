@@ -14,14 +14,20 @@ export default function Home() {
   const [showHueMap, setShowHueMap] = useState(true);
 
   const handleReorderRow = useCallback((fromId: string, toId: string) => {
-    const fromIndex = state.brandColors.findIndex(c => c.id === fromId);
-    const toIndex = state.brandColors.findIndex(c => c.id === toId);
-    if (fromIndex === -1 || toIndex === -1) return;
-    if (state.sortByHue) {
-      dispatch({ type: 'SET_SORT_BY_HUE', value: false });
-    }
-    dispatch({ type: 'REORDER_COLOR', fromIndex, toIndex });
-  }, [state.brandColors, state.sortByHue, dispatch]);
+    // Get the current visual order (hue-sorted or source order)
+    const visualIds = families.map(f => f.brand.id);
+    const fromIdx = visualIds.indexOf(fromId);
+    const toIdx = visualIds.indexOf(toId);
+    if (fromIdx === -1 || toIdx === -1) return;
+
+    // Apply the drag swap on the visual order
+    const reordered = [...visualIds];
+    const [moved] = reordered.splice(fromIdx, 1);
+    reordered.splice(toIdx, 0, moved);
+
+    // SET_BRAND_ORDER sets brandColors to this order and turns off sortByHue
+    dispatch({ type: 'SET_BRAND_ORDER', ids: reordered });
+  }, [families, dispatch]);
 
   return (
     <div className="min-h-screen min-w-[900px] transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
