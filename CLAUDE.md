@@ -1,5 +1,8 @@
 # Brand Color System
 
+## Handoff Note (2026-02-27)
+Fresh fork from `color-palette` v1.2. Git is initialized on `main` with remote set to `github.com/jeffalldridge/brand-color-system.git`, all files staged but **not yet committed** (sandbox couldn't set git identity). First order of business: `git commit -m "Initial commit: fork from color-palette v1.2"` then `gh repo create brand-color-system --private && git push -u origin main`. Package name and version already updated. `node_modules` not present — run `npm install` after commit.
+
 ## Session Protocol
 
 This project uses a Hello/Shutdown protocol for session continuity.
