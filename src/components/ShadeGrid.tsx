@@ -76,17 +76,14 @@ function SortableRow({
     >
       {/* Name column — drag handle */}
       <div
-        className={`w-24 shrink-0 flex items-center gap-1.5 pr-3 py-1 cursor-grab active:cursor-grabbing select-none rounded-md transition-colors ${bgIsLight ? 'hover:bg-black/[0.06]' : 'hover:bg-white/[0.06]'}`}
+        className={`w-24 shrink-0 flex items-center pr-3 py-1 cursor-grab active:cursor-grabbing select-none rounded-r-md transition-all border-l-2 ${bgIsLight ? 'group-hover:bg-black/[0.04]' : 'group-hover:bg-white/[0.04]'}`}
+        style={{ borderLeftColor: isDragging ? family.adjustedHex : 'transparent' }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderLeftColor = family.adjustedHex; }}
+        onMouseLeave={(e) => { if (!isDragging) e.currentTarget.style.borderLeftColor = 'transparent'; }}
         {...attributes}
         {...listeners}
       >
-        {/* Grip indicator */}
-        <div className={`flex flex-col gap-[3px] shrink-0 opacity-0 group-hover:opacity-40 transition-opacity`}>
-          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
-          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
-          <div className={`w-[3px] h-[3px] rounded-full ${bgIsLight ? 'bg-black' : 'bg-white'}`} />
-        </div>
-        <div className="flex flex-col min-w-0">
+        <div className="flex flex-col min-w-0 pl-1">
           <span className={`text-sm font-semibold ${txt} truncate transition-colors ${bgIsLight ? 'group-hover:text-black' : 'group-hover:text-white'}`}>
             {family.brand.name}
           </span>
