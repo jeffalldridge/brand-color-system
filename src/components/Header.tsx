@@ -1,6 +1,5 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
 import type { PaletteState, PaletteAction } from '@/hooks/usePaletteState';
 import BackgroundSlider from './BackgroundSlider';
 import TextOverlayToggle from './TextOverlayToggle';
@@ -18,31 +17,39 @@ export default function Header({
     bgSliderValue,
     bgIsLight,
 }: HeaderProps) {
-    // Detect display gamut for informational badge
-    const displayGamut = useSyncExternalStore(
-        () => () => { },
-        () => {
-            if (window.matchMedia('(color-gamut: rec2020)').matches) return 'rec2020' as const;
-            if (window.matchMedia('(color-gamut: p3)').matches) return 'p3' as const;
-            return 'srgb' as const;
-        },
-        () => 'srgb' as const,
-    );
+    // Icon color from first brand color
+    const iconColor = state.brandColors[0]?.hex ?? '#2563eb';
 
     return (
         <header className={`sticky top-0 z-20 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? 'bg-white/70 border-black/15' : 'bg-black/60 border-white/15'}`}>
             <div className="max-w-[1800px] mx-auto px-6 py-4">
-                {/* Row 1: Title + badge | Background slider + Reset */}
+                {/* Row 1: Icon + Title + gamut toggle | Background slider + Reset */}
                 <div className="flex items-center justify-between gap-4">
-                    <h1 className={`text-lg font-bold tracking-tight flex items-center gap-2 ${bgIsLight ? 'text-black' : 'text-white'}`}>
-                        Brand Color System
-                        <span
-                            className={`text-[8px] font-mono font-normal uppercase tracking-wider px-1.5 py-0.5 rounded border ${bgIsLight ? 'border-black/15 text-black/40' : 'border-white/15 text-white/40'}`}
-                            title={`Display supports ${displayGamut.toUpperCase()} gamut`}
-                        >
-                            {displayGamut}
-                        </span>
-                    </h1>
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-5 h-5 rounded-md shrink-0"
+                            style={{ backgroundColor: iconColor }}
+                            title={`First brand color: ${iconColor}`}
+                        />
+                        <h1 className={`text-lg font-bold tracking-tight ${bgIsLight ? 'text-black' : 'text-white'}`}>
+                            Brand Color System
+                        </h1>
+                        <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                            {(['srgb', 'p3'] as const).map((g) => (
+                                <button
+                                    key={g}
+                                    onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
+                                    title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
+                                    className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
+                                        ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                        : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                        }`}
+                                >
+                                    {g === 'srgb' ? 'sRGB' : 'P3'}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                     <div className="flex items-center gap-4">
                         <BackgroundSlider
                             value={bgSliderValue}
@@ -63,24 +70,14 @@ export default function Header({
                     </div>
                 </div>
 
-                {/* Row 2: Gamut + View toggles + Text Overlay + Gap */}
+                {/* Row 2: Text Overlay | View toggles | Gap size */}
                 <div className="flex items-center gap-4 flex-wrap mt-3">
-                    {/* Gamut target toggle */}
-                    <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
-                        {(['srgb', 'p3'] as const).map((g) => (
-                            <button
-                                key={g}
-                                onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
-                                title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
-                                className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
-                                    ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
-                                    : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
-                                    }`}
-                            >
-                                {g === 'srgb' ? 'sRGB' : 'P3'}
-                            </button>
-                        ))}
-                    </div>
+                    {/* Text overlay */}
+                    <TextOverlayToggle
+                        value={state.textOverlay}
+                        bgIsLight={bgIsLight}
+                        onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
+                    />
 
                     {/* View toggles */}
                     <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
@@ -102,13 +99,6 @@ export default function Header({
                             </button>
                         ))}
                     </div>
-
-                    {/* Text overlay */}
-                    <TextOverlayToggle
-                        value={state.textOverlay}
-                        bgIsLight={bgIsLight}
-                        onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
-                    />
 
                     {/* Gap size control */}
                     <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
