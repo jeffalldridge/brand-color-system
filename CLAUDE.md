@@ -124,6 +124,24 @@ All state in `usePaletteState.ts` via `useReducer`. `generateAllFamilies` wrappe
 - Custom slider styling in `globals.css` via `.custom-range` class with CSS custom properties
 - `color-scheme: light dark` on `:root` for browser color management
 
+### Styling Strategy — Inline Tailwind, No Abstraction
+- **Do NOT** use `@apply`, custom CSS classes, or `lib/ui-tokens.ts` to deduplicate Tailwind utilities
+- Tailwind v4 emits each atomic rule once regardless of how many JSX elements reference it — no CSS bloat
+- Vercel serves with brotli/gzip which deduplicates repeated class strings in the JS bundle
+- Atomic selectors are faster for the browser to match than nested/compound custom classes
+- The real consistency tool is **periodic design audits**, not abstraction layers
+- Keep styles colocated in JSX so you can see what a component looks like without jumping to a CSS file
+
+### Design Tokens (copy-paste reference for audits)
+These are the canonical values — every component should match:
+- **Section headings:** `text-xs font-semibold uppercase tracking-widest` + muted color (`text-black/60` / `text-white/60`)
+- **Primary text:** `/80` opacity (`text-black/80` / `text-white/80`)
+- **Muted text:** `/60`, **Dim text:** `/50`, **Ghost text:** `/40`
+- **Buttons (bordered):** `text-xs font-medium rounded-md border transition-colors`
+- **Toggle button groups:** `rounded-md overflow-hidden border` wrapper
+- **Links:** `no-underline hover:underline underline-offset-2`
+- **Touch targets (icon buttons):** `w-8 h-6` (4:3 ratio)
+
 ### State Conventions
 - `rampConfig.steps` is source of truth for shade columns: `{ step, l }[]`
 - Steps sort by L ascending (dark→light)
@@ -133,7 +151,7 @@ All state in `usePaletteState.ts` via `useReducer`. `generateAllFamilies` wrappe
 - All export functions (CSS, Tailwind, Tokens, ASE, ACO) respect sort order
 
 ### Drag-and-Drop
-- **Source cards** (BrandColorEditor): horizontal dnd-kit with `horizontalListSortingStrategy`, dispatches `REORDER_COLOR`
+- **Source cards** (BrandColorEditor): dnd-kit with `rectSortingStrategy` (handles multi-row wrapping), dispatches `REORDER_COLOR` + sets `sortByHue: false`
 - **Shade grid rows** (ShadeGrid): vertical dnd-kit with `verticalListSortingStrategy`, drag handle is name column only
 - Dragging a shade row dispatches `SET_BRAND_ORDER` which atomically reorders `brandColors[]` and sets `sortByHue: false`
 - Colored left-border accent on hover indicates the drag handle
