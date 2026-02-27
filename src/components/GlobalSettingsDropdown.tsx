@@ -46,20 +46,14 @@ export default function GlobalSettingsDropdown({ state, dispatch, bgIsLight }: G
                     <div className={`px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider ${bgIsLight ? 'text-black/40' : 'text-white/40'}`}>
                         Advanced
                     </div>
-                    {([
-                        { label: 'Match Intensity', active: state.matchIntensity, action: () => dispatch({ type: 'SET_MATCH_INTENSITY', value: !state.matchIntensity }) },
-                        { label: 'Sort by Hue', active: state.sortByHue, action: () => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue }) },
-                    ] as const).map((toggle) => (
-                        <button
-                            key={toggle.label}
-                            onClick={toggle.action}
-                            className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center justify-between transition-colors ${bgIsLight ? 'hover:bg-black/5 text-black' : 'hover:bg-white/10 text-white'
-                                }`}
-                        >
-                            {toggle.label}
-                            {toggle.active && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500"><polyline points="20 6 9 17 4 12"></polyline></svg>}
-                        </button>
-                    ))}
+                    <button
+                        onClick={() => dispatch({ type: 'SET_SORT_BY_HUE', value: !state.sortByHue })}
+                        className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center justify-between transition-colors ${bgIsLight ? 'hover:bg-black/5 text-black' : 'hover:bg-white/10 text-white'
+                            }`}
+                    >
+                        Sort by Hue
+                        {state.sortByHue && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                    </button>
                 </div>
             )}
         </div>

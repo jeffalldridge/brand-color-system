@@ -47,8 +47,7 @@ export default function OutputSection({ families, bgIsLight, sortByHue }: Output
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [expandedFamily, setExpandedFamily] = useState<string | null>(null);
 
-  const visibleFamilies = families.filter(f => f.brand.visible !== false);
-  const displayFamilies = sortByHue ? sortFamilies(visibleFamilies) : visibleFamilies;
+  const displayFamilies = sortByHue ? sortFamilies(families) : families;
 
   const txt = bgIsLight ? 'text-black/90' : 'text-white/90';
   const txtMuted = bgIsLight ? 'text-black/60' : 'text-white/60';
@@ -261,18 +260,17 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
           <Section title="How shades are built" headingColor={headingColor}>
             Each source color is converted to OKLCH. The hue and chroma stay fixed while
             lightness is replaced by each column&apos;s L value, producing a dark-to-light
-            ramp that preserves the color&apos;s character. Step numbers map directly to
-            lightness: <Code bg={codeBg}>step = round(1000 &times; (1 &minus; L))</Code>,
-            so step 500 = 50% lightness, 900 = very dark, 100 = very light. Drag the L sliders
-            or type custom step numbers to reshape the ramp.
+            ramp that preserves the color&apos;s character. Columns use the standard Tailwind
+            shade numbers (50, 100, 200 ... 900, 950) mapped to OKLCH lightness values,
+            so the output plugs directly into a Tailwind theme.
           </Section>
 
-          <Section title="The hero color" headingColor={headingColor}>
-            The hero is the anchor of the system. Its exact hex is locked and gets a
-            dedicated column in the grid. Click the dot next to any source color to
-            transfer hero status. <strong>Match Intensity</strong> blends every other
-            color&apos;s chroma toward the hero&apos;s at that step, which helps the
-            palette feel more cohesive across hues.
+          <Section title="Gamut mapping" headingColor={headingColor}>
+            Toggle between <strong>sRGB</strong> and <strong>P3</strong> gamut targets.
+            sRGB is the safe default for web — every display supports it. P3 is a wider
+            gamut available on modern Apple displays and some Android screens. When a shade
+            falls outside the chosen gamut it is mapped back using OKLCH-aware compression,
+            preserving hue and lightness while reducing chroma just enough to fit.
           </Section>
 
           <Section title="Contrast numbers" headingColor={headingColor}>
@@ -280,7 +278,6 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
             <Link href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html" className={linkColor}>WCAG 2.x contrast ratios</Link>{' '}
             against white and black text. <strong>4.5+</strong> passes AA for body
             text; <strong>3+</strong> passes AA for large text (18px+ bold or 24px+ regular).
-            Helpful for identifying which shades work as text backgrounds at a glance.
           </Section>
 
           <Section title="Adjustments" headingColor={headingColor}>
@@ -301,7 +298,6 @@ function HowItWorks({ bgIsLight }: { bgIsLight: boolean }) {
             JSON compatible with Tokens Studio, Style Dictionary, and Figma.{' '}
             <strong>.ase</strong> (Adobe Swatch Exchange) opens in Illustrator, Photoshop,
             and InDesign. <strong>.aco</strong> (Adobe Color Swatch) is Photoshop-specific.
-            Hidden colors are excluded from all exports.
           </Section>
         </div>
       )}

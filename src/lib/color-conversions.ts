@@ -11,6 +11,7 @@ import type { GamutTarget, OklchColor } from './types';
 
 const toOklch = converter('oklch');
 const toRgbColor = converter('rgb');
+const toP3Color = converter('p3');
 const gamutMapSrgb = toGamut('rgb', 'oklch');
 const gamutMapP3 = toGamut('p3', 'oklch');
 
@@ -38,7 +39,8 @@ export function oklchToHex(l: number, c: number, h: number, gamut: GamutTarget =
 export function isInGamut(l: number, c: number, h: number, gamut: GamutTarget = 'srgb'): boolean {
   const color = { mode: 'oklch' as const, l, c, h };
   if (gamut === 'p3') {
-    return displayable(color, 'p3');
+    // Convert to P3 space and check if all channels are within [0, 1]
+    return displayable(toP3Color(color));
   }
   return displayable(color);
 }

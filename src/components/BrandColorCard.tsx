@@ -16,13 +16,11 @@ export interface BrandColorCardProps {
     onNameChange: (index: number, name: string) => void;
     onAdjustmentsChange: (index: number, adjustments: Partial<Pick<BrandColor, 'hueShift' | 'saturationShift' | 'lightnessShift'>>) => void;
     onRemove: (index: number) => void;
-    onSetHero: (index: number) => void;
-    onToggleVisibility: (index: number) => void;
 }
 
 export default function BrandColorCard({
     color, index, bgIsLight, hasAdjustments, adjustedHex, canRemove, baseOklch,
-    onColorChange, onNameChange, onAdjustmentsChange, onRemove, onSetHero, onToggleVisibility
+    onColorChange, onNameChange, onAdjustmentsChange, onRemove,
 }: BrandColorCardProps) {
     // Local state for revealing HCL sliders
     const [showAdjustmentsLocal, setShowAdjustmentsLocal] = useState(false);
@@ -63,7 +61,7 @@ export default function BrandColorCard({
         >
             {/* Top Bar - Color display area and drag handle */}
             <div
-                className={`w-full h-10 relative overflow-hidden flex cursor-grab active:cursor-grabbing group/header ${!color.visible ? 'opacity-30 grayscale' : ''}`}
+                className="w-full h-10 relative overflow-hidden flex cursor-grab active:cursor-grabbing group/header"
                 {...attributes}
                 {...listeners}
             >
@@ -116,7 +114,7 @@ export default function BrandColorCard({
                     />
                 </div>
 
-                {/* Action Row: Hex Input + Toggles */}
+                {/* Action Row: Hex Input + Adjust Toggle */}
                 <div className="px-2 py-1.5 flex gap-1 items-center justify-between">
                     <input
                         type="text"
@@ -130,31 +128,11 @@ export default function BrandColorCard({
                         }}
                         onFocus={(e) => e.target.select()}
                         onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); if (e.key === 'Escape') (e.target as HTMLInputElement).blur(); }}
-                        disabled={color.locked}
-                        className={`min-w-0 flex-1 text-[10px] font-mono px-1 py-1 rounded border border-transparent focus:outline-none transition-colors uppercase ${color.locked
-                            ? (bgIsLight ? 'text-black/40 bg-transparent' : 'text-white/40 bg-transparent')
-                            : (bgIsLight ? 'text-black/80 hover:bg-black/5 focus:bg-black/5' : 'text-white/80 hover:bg-white/10 focus:bg-white/10')
+                        className={`min-w-0 flex-1 text-[10px] font-mono px-1 py-1 rounded border border-transparent focus:outline-none transition-colors uppercase ${bgIsLight ? 'text-black/80 hover:bg-black/5 focus:bg-black/5' : 'text-white/80 hover:bg-white/10 focus:bg-white/10'
                             }`}
                     />
 
                     <div className="flex items-center gap-1 shrink-0">
-                        {/* Hero Toggle */}
-                        <button
-                            type="button"
-                            onClick={() => onSetHero(index)}
-                            className={`flex items-center justify-center w-6 h-6 rounded transition-all ${bgIsLight ? 'hover:bg-black/10' : 'hover:bg-white/10'
-                                }`}
-                            title={color.locked ? 'Remove hero status' : 'Set as hero color'}
-                        >
-                            <span
-                                className="w-2.5 h-2.5 rounded-full transition-all"
-                                style={color.locked
-                                    ? { backgroundColor: adjustedHex, boxShadow: `0 0 8px ${adjustedHex}, 0 0 3px ${adjustedHex}` }
-                                    : { backgroundColor: bgIsLight ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)', border: `1.5px solid ${bgIsLight ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.3)'}` }
-                                }
-                            />
-                        </button>
-
                         {/* Adjust Toggle */}
                         <button
                             onClick={() => setShowAdjustmentsLocal(!showAdjustmentsLocal)}
@@ -204,15 +182,10 @@ export default function BrandColorCard({
                                 : Math.max(0, (color.saturationShift / 100) * 0.15)) * 10000) / 10000;
                             const absL = Math.round(Math.max(0, Math.min(1, bL + color.lightnessShift)) * 10000) / 10000;
 
-                            // Origin marker position as percentage of slider range
-                            // Round to 4 decimal places to avoid SSR/client hydration mismatch
                             const round4 = (n: number) => Math.round(n * 10000) / 10000;
-                            // Hue: 0-360 mapped to 0-100%
                             const hueOriginPct = round4((bH / 360) * 100);
-                            // Chroma: slider range is 0 to maxC, origin at bC
-                            const chromaMax = round4(bC > 0.005 ? bC * 2 : 0.15); // +100% is the right edge
-                            const chromaOriginPct = bC > 0.005 ? 50 : 0; // base sits at midpoint for chromatic
-                            // Lightness: 0-1 mapped to 0-100%
+                            const chromaMax = round4(bC > 0.005 ? bC * 2 : 0.15);
+                            const chromaOriginPct = bC > 0.005 ? 50 : 0;
                             const lightnessOriginPct = round4(bL * 100);
 
                             const markerColor = bgIsLight ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.35)';
@@ -227,7 +200,6 @@ export default function BrandColorCard({
                                     originPct: hueOriginPct,
                                     onChange: (v: number) => {
                                         const shift = v - bH;
-                                        // Normalize to -180..180 range
                                         const normalized = ((shift + 540) % 360) - 180;
                                         onAdjustmentsChange(index, { hueShift: Math.round(normalized) });
                                     },
@@ -241,11 +213,9 @@ export default function BrandColorCard({
                                     originPct: chromaOriginPct,
                                     onChange: (v: number) => {
                                         if (bC > 0.005) {
-                                            // Multiplicative: solve for shift% → v = bC * (1 + s/100)
                                             const s = ((v / bC) - 1) * 100;
                                             onAdjustmentsChange(index, { saturationShift: Math.round(Math.max(-100, Math.min(100, s))) });
                                         } else {
-                                            // Additive: solve for shift% → v = (s/100) * 0.15
                                             const s = (v / 0.15) * 100;
                                             onAdjustmentsChange(index, { saturationShift: Math.round(Math.max(-100, Math.min(100, s))) });
                                         }
@@ -298,30 +268,18 @@ export default function BrandColorCard({
                     </div>
                 )}
 
-                {/* Footer actions: Hide / Remove */}
-                <div className="flex gap-1.5 px-1.5 pb-1.5">
-                    {!color.locked && (
-                        <button
-                            onClick={() => onToggleVisibility(index)}
-                            className={`flex-1 py-1 text-[9px] uppercase tracking-wider font-bold rounded transition-colors ${color.visible
-                                ? (bgIsLight ? 'text-black/40 hover:text-black/70 hover:bg-black/5' : 'text-white/40 hover:text-white/70 hover:bg-white/5')
-                                : (bgIsLight ? 'text-black/70 bg-black/5 hover:bg-black/10' : 'text-white/70 bg-white/5 hover:bg-white/10')
-                                }`}
-                            title={color.visible ? 'Hide from grid & exports' : 'Show in grid & exports'}
-                        >
-                            {color.visible ? 'Hide' : 'Show'}
-                        </button>
-                    )}
-                    {canRemove && (
+                {/* Footer: Remove */}
+                {canRemove && (
+                    <div className="px-1.5 pb-1.5">
                         <button
                             onClick={() => onRemove(index)}
-                            className="flex-1 py-1 text-[9px] uppercase tracking-wider font-bold text-red-500/50 hover:text-red-500 hover:bg-red-500/10 rounded transition-colors"
+                            className="w-full py-1 text-[9px] uppercase tracking-wider font-bold text-red-500/50 hover:text-red-500 hover:bg-red-500/10 rounded transition-colors"
                             title="Remove this color"
                         >
                             Remove
                         </button>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

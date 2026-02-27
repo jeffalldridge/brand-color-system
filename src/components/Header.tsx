@@ -1,14 +1,12 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import type { ShadeFamily } from '@/lib/types';
 import type { PaletteState, PaletteAction } from '@/hooks/usePaletteState';
 import BackgroundSlider from './BackgroundSlider';
 import TextOverlayToggle from './TextOverlayToggle';
 import GlobalSettingsDropdown from './GlobalSettingsDropdown';
 
 interface HeaderProps {
-    families: ShadeFamily[];
     state: PaletteState;
     dispatch: React.Dispatch<PaletteAction>;
     bgSliderValue: number;
@@ -16,24 +14,20 @@ interface HeaderProps {
 }
 
 export default function Header({
-    families,
     state,
     dispatch,
     bgSliderValue,
     bgIsLight,
 }: HeaderProps) {
-    const heroFamily = families.find(f => f.brand.locked);
-    const heroColor = heroFamily?.adjustedHex ?? '#e4002b';
-
-    // Detect display gamut for color accuracy indicator (static read, never changes)
+    // Detect display gamut for informational badge
     const displayGamut = useSyncExternalStore(
-        () => () => { },   // no-op subscribe
-        () => {           // client snapshot
+        () => () => { },
+        () => {
             if (window.matchMedia('(color-gamut: rec2020)').matches) return 'rec2020' as const;
             if (window.matchMedia('(color-gamut: p3)').matches) return 'p3' as const;
             return 'srgb' as const;
         },
-        () => 'srgb' as const, // server snapshot
+        () => 'srgb' as const,
     );
 
     return (
@@ -41,16 +35,10 @@ export default function Header({
             <div className="max-w-[1800px] mx-auto px-6 py-4">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <h1 className={`text-lg font-bold tracking-tight flex items-center gap-2 ${bgIsLight ? 'text-black' : 'text-white'}`}>
-                        <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: heroColor, boxShadow: `0 0 10px ${heroColor}` }}></span>
                         Brand Color System
                         <span
-                            className={`text-[8px] font-mono font-normal uppercase tracking-wider px-1.5 py-0.5 rounded border ${bgIsLight ? 'border-black/15 text-black/40' : 'border-white/15 text-white/40'
-                                }`}
-                            title={
-                                displayGamut === 'rec2020' ? 'Display supports Rec. 2020 wide gamut — colors rendered at maximum fidelity'
-                                    : displayGamut === 'p3' ? 'Display supports P3 wide gamut — OKLCH values in Tailwind export will render beyond sRGB'
-                                        : 'Display limited to sRGB gamut — all colors displayed accurately within sRGB'
-                            }
+                            className={`text-[8px] font-mono font-normal uppercase tracking-wider px-1.5 py-0.5 rounded border ${bgIsLight ? 'border-black/15 text-black/40' : 'border-white/15 text-white/40'}`}
+                            title={`Display supports ${displayGamut.toUpperCase()} gamut`}
                         >
                             {displayGamut}
                         </span>
@@ -66,6 +54,25 @@ export default function Header({
                             bgIsLight={bgIsLight}
                             onChange={(mode) => dispatch({ type: 'SET_TEXT_OVERLAY', mode })}
                         />
+
+                        {/* Gamut target toggle */}
+                        <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
+                            {(['srgb', 'p3'] as const).map((g) => (
+                                <button
+                                    key={g}
+                                    onClick={() => dispatch({ type: 'SET_GAMUT_TARGET', value: g })}
+                                    title={g === 'srgb' ? 'Clamp colors to sRGB gamut' : 'Clamp colors to Display P3 gamut (wider)'}
+                                    className={`px-3 py-1 text-xs font-medium transition-colors ${state.gamutTarget === g
+                                        ? (bgIsLight ? 'bg-black/15 text-black' : 'bg-white/20 text-white')
+                                        : (bgIsLight ? 'bg-transparent text-black/50 hover:text-black/70' : 'bg-transparent text-white/50 hover:text-white/70')
+                                        }`}
+                                >
+                                    {g === 'srgb' ? 'sRGB' : 'P3'}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* View toggles */}
                         <div className={`flex rounded-md overflow-hidden border ${bgIsLight ? 'border-black/20' : 'border-white/20'}`}>
                             {([
                                 { label: 'Nearest Input', title: 'Show outline ring on the shade closest to each color\'s original hex', active: state.showNearestOutline, action: () => dispatch({ type: 'SET_SHOW_NEAREST_OUTLINE', value: !state.showNearestOutline }) },

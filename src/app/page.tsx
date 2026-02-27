@@ -17,7 +17,7 @@ export default function Home() {
 
   const MIN_WHEEL = 180;
   const MAX_WHEEL = 500;
-  const MIN_CARDS = 600; // source cards need at least this much
+  const MIN_CARDS = 600;
 
   const handleDividerPointerDown = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -50,7 +50,6 @@ export default function Home() {
     <div className="min-h-screen transition-colors duration-500 ease-in-out" style={{ backgroundColor: state.backgroundColor }}>
       {/* Sticky controls header */}
       <Header
-        families={families}
         state={state}
         dispatch={dispatch}
         bgSliderValue={bgSliderValue}
@@ -103,8 +102,6 @@ export default function Home() {
                 onReorder={(from, to) => dispatch({ type: 'REORDER_COLOR', fromIndex: from, toIndex: to })}
                 onAddColor={() => dispatch({ type: 'ADD_COLOR' })}
                 onRemoveColor={(index) => dispatch({ type: 'REMOVE_COLOR', index })}
-                onSetHero={(index) => dispatch({ type: 'SET_HERO', id: state.brandColors[index].id })}
-                onToggleVisibility={(index) => dispatch({ type: 'TOGGLE_VISIBILITY', index })}
               />
             </div>
           </div>
@@ -128,10 +125,6 @@ export default function Home() {
             showSwatchText={state.showSwatchText}
             compactView={state.compactView}
             sortByHue={state.sortByHue}
-            onUpdateStep={(index, updates) => dispatch({ type: 'UPDATE_STEP', index, updates })}
-            onAddStep={() => dispatch({ type: 'ADD_STEP' })}
-            onRemoveStep={(index) => dispatch({ type: 'REMOVE_STEP', index })}
-            onSortSteps={() => dispatch({ type: 'SORT_STEPS' })}
           />
         </section>
 

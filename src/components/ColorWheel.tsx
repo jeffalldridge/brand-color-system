@@ -47,7 +47,6 @@ function arcPath(startDeg: number, endDeg: number): string {
 /** Map chroma to a visual radius within the ring band. */
 function chromaRadius(c: number): number {
   const t = Math.min(c / MAX_CHROMA, 1);
-  // Place dots within the ring: low chroma near inner edge, high chroma near outer edge
   return R_INNER + t * (R_OUTER - R_INNER);
 }
 
@@ -84,11 +83,9 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
     return segments;
   }, []);
 
-  // Filter to visible families with meaningful chroma (skip achromatic)
+  // Filter to families with meaningful chroma (skip achromatic)
   const chromaFamilies = useMemo(
-    () => families.filter(f =>
-      f.brand.visible !== false && f.adjustedOklch.c >= CHROMA_THRESHOLD,
-    ),
+    () => families.filter(f => f.adjustedOklch.c >= CHROMA_THRESHOLD),
     [families],
   );
 
@@ -124,17 +121,10 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
     });
   }, [chromaFamilies]);
 
-  const heroFamily = chromaFamilies.find(f => f.brand.locked);
-  const heroHex = heroFamily?.adjustedHex ?? '#e4002b';
-
   const dotStroke = bgIsLight ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.7)';
   const dimStroke = bgIsLight ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.3)';
   const labelFill = bgIsLight ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.75)';
   const centerFill = bgIsLight ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)';
-
-  // Separate hero from non-hero for z-order (hero renders last = on top)
-  const nonHero = colorData.filter(d => !d.family.brand.locked);
-  const hero = colorData.find(d => d.family.brand.locked);
 
   // Don't render if no chromatic colors
   if (colorData.length === 0) return null;
@@ -147,12 +137,6 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
         role="img"
         aria-label="Color wheel showing brand color positions by hue and chroma"
       >
-        <defs>
-          <filter id="hero-glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="0" stdDeviation="3" floodColor={heroHex} floodOpacity="0.7" />
-          </filter>
-        </defs>
-
         {/* Center fill for clean donut look */}
         <circle cx={CX} cy={CY} r={R_INNER - 1} fill={centerFill} />
 
@@ -194,8 +178,8 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
             />
           ))}
 
-        {/* Adjusted dots (non-hero) */}
-        {nonHero.map(d => (
+        {/* Adjusted dots */}
+        {colorData.map(d => (
           <circle
             key={`adj-${d.family.brand.id}`}
             cx={d.adj.x}
@@ -207,19 +191,6 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
           />
         ))}
 
-        {/* Hero dot (on top of everything) */}
-        {hero && (
-          <circle
-            cx={hero.adj.x}
-            cy={hero.adj.y}
-            r={8}
-            fill={hero.family.adjustedHex}
-            stroke={dotStroke}
-            strokeWidth={1.5}
-            filter="url(#hero-glow)"
-          />
-        )}
-
         {/* Labels */}
         {colorData.map(d => (
           <text
@@ -229,8 +200,8 @@ export default function ColorWheel({ families, bgIsLight }: ColorWheelProps) {
             textAnchor={d.label.anchor}
             dominantBaseline="central"
             fill={labelFill}
-            fontSize={d.family.brand.locked ? 10 : 9}
-            fontWeight={d.family.brand.locked ? 700 : 600}
+            fontSize={9}
+            fontWeight={600}
             style={{ fontFamily: 'var(--font-geist-mono)' }}
           >
             {d.family.brand.name}

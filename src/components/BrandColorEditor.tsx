@@ -27,21 +27,16 @@ interface BrandColorEditorProps {
   onReorder: (fromIndex: number, toIndex: number) => void;
   onAddColor: () => void;
   onRemoveColor: (index: number) => void;
-  onSetHero: (index: number) => void;
-  onToggleVisibility: (index: number) => void;
 }
 
 import BrandColorCard from './BrandColorCard';
 
-// -----------------------------------------------------
-// Main Component Wrapper
-// -----------------------------------------------------
-export default function BrandColorEditor({ brandColors, families, bgIsLight, onColorChange, onNameChange, onAdjustmentsChange, onReorder, onAddColor, onRemoveColor, onSetHero, onToggleVisibility }: BrandColorEditorProps) {
+export default function BrandColorEditor({ brandColors, families, bgIsLight, onColorChange, onNameChange, onAdjustmentsChange, onReorder, onAddColor, onRemoveColor }: BrandColorEditorProps) {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8, // Require 8px of movement before drag starts (allows clicks on the chip naturally)
+        distance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -97,8 +92,6 @@ export default function BrandColorEditor({ brandColors, families, bgIsLight, onC
                   onNameChange={onNameChange}
                   onAdjustmentsChange={onAdjustmentsChange}
                   onRemove={onRemoveColor}
-                  onSetHero={onSetHero}
-                  onToggleVisibility={onToggleVisibility}
                 />
               </div>
             );
