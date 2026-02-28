@@ -22,7 +22,7 @@ export default function Header({
 
   return (
     <header
-      className={`sticky top-0 z-20 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? "bg-white/70 border-black/15" : "bg-black/60 border-white/15"}`}
+      className={`sticky top-0 z-40 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? "bg-white/70 border-black/15" : "bg-black/60 border-white/15"}`}
     >
       <div className="max-w-[1800px] mx-auto px-6 py-4">
         {/* Row 1: Icon + Title + gamut toggle | Background slider + Reset */}
