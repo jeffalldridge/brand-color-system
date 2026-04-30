@@ -234,6 +234,25 @@ export default function Home() {
               Tailwind CSS
             </a>
           </p>
+          <p>
+            <a
+              href="https://github.com/jeffalldridge/brand-color-system"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              Source on GitHub
+            </a>
+            {" "}&middot;{" "}
+            <a
+              href="https://github.com/jeffalldridge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`no-underline hover:underline underline-offset-2 transition-colors ${bgIsLight ? "hover:text-black/70" : "hover:text-white/70"}`}
+            >
+              Jeff Alldridge on GitHub
+            </a>
+          </p>
         </footer>
       </main>
     </div>
