@@ -15,11 +15,11 @@ export default function BackgroundSlider({
   const border = bgIsLight ? "border-black/20" : "border-white/20";
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex min-w-0 flex-wrap items-center gap-3">
       <label className={`text-xs font-medium whitespace-nowrap ${txt}`}>
         Background
       </label>
-      <div className="flex items-center gap-2">
+      <div className="flex min-w-0 items-center gap-2">
         <div className={`w-4 h-4 rounded-sm bg-white border ${border}`} />
         <input
           type="range"
@@ -29,7 +29,7 @@ export default function BackgroundSlider({
           onChange={(e) => onChange(100 - Number(e.target.value))}
           aria-label="Background brightness"
           aria-valuetext={`${value}% — ${value > 60 ? "light" : value > 30 ? "medium" : "dark"} background`}
-          className="w-32 hover:opacity-80 transition-opacity custom-range"
+          className="w-32 max-w-[45vw] hover:opacity-80 transition-opacity custom-range"
           style={
             {
               "--slider-color": bgIsLight ? "#000" : "#fff",

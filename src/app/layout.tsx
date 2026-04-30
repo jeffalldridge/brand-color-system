@@ -4,7 +4,6 @@ import "./globals.css";
 import {
     APP_DESCRIPTION,
     APP_NAME,
-    BASE_PATH,
     CANONICAL_URL,
     SITE_URL,
     withBasePath,
@@ -143,7 +142,7 @@ const jsonLd = {
         priceCurrency: "USD",
         availability: "https://schema.org/InStock",
     },
-    license: `${SITE_URL}${BASE_PATH}/`,
+    license: "https://github.com/jeffalldridge/brand-color-system/blob/main/LICENSE",
     featureList: [
         "OKLCH-based shade family generation",
         "Per-color hue, chroma, and lightness adjustments",

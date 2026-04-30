@@ -24,9 +24,9 @@ export default function Header({
     <header
       className={`sticky top-0 z-40 backdrop-blur-xl border-b shadow-sm transition-colors ${bgIsLight ? "bg-white/70 border-black/15" : "bg-black/60 border-white/15"}`}
     >
-      <div className="max-w-[1800px] mx-auto px-6 py-4">
+      <div className="max-w-[1800px] mx-auto px-4 py-4 sm:px-6">
         {/* Row 1: Icon + Title + gamut toggle | Background slider + Reset */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
           <div className="flex items-center gap-3">
             <div
               className="w-5 h-5 rounded-md shrink-0"
@@ -39,7 +39,7 @@ export default function Header({
               Brand Color System
             </h1>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:w-auto lg:justify-end lg:gap-4">
             <BackgroundSlider
               value={bgSliderValue}
               bgIsLight={bgIsLight}

@@ -46,7 +46,7 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen min-w-[900px] transition-colors duration-500 ease-in-out"
+      className="min-h-screen overflow-x-hidden transition-colors duration-500 ease-in-out"
       style={{ backgroundColor: state.backgroundColor }}
     >
       {/* Sticky controls header */}
@@ -57,7 +57,7 @@ export default function Home() {
         bgIsLight={bgIsLight}
       />
 
-      <main className="max-w-[1800px] mx-auto px-6 py-4 space-y-5">
+      <main className="max-w-[1800px] mx-auto px-4 py-4 space-y-5 sm:px-6">
         {/* Source colors + optional hue map */}
         <section>
           <div className="mb-2 flex items-center gap-3">
@@ -154,17 +154,21 @@ export default function Home() {
               Shade Family Ramp
             </h2>
           </div>
-          <ShadeGrid
-            families={families}
-            textOverlay={state.textOverlay}
-            bgIsLight={bgIsLight}
-            rampConfig={state.rampConfig}
-            showNearestOutline={state.showNearestOutline}
-            showSwatchText={state.showSwatchText}
-            gapSize={state.gapSize}
-            gamutTarget={state.gamutTarget}
-            onReorderRow={handleReorderRow}
-          />
+          <div className="-mx-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+            <div className="min-w-[900px]">
+              <ShadeGrid
+                families={families}
+                textOverlay={state.textOverlay}
+                bgIsLight={bgIsLight}
+                rampConfig={state.rampConfig}
+                showNearestOutline={state.showNearestOutline}
+                showSwatchText={state.showSwatchText}
+                gapSize={state.gapSize}
+                gamutTarget={state.gamutTarget}
+                onReorderRow={handleReorderRow}
+              />
+            </div>
+          </div>
         </section>
 
         {/* Output values */}
