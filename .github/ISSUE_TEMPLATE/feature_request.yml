@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest something the tool could do that it doesn't yet.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use cases first, please. "I want a button that does X" is harder
+        to triage than "I'm trying to do Y and the current flow makes it
+        clunky because Z."
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: What are you trying to accomplish?
+      description: The end goal, in your words.
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-flow
+    attributes:
+      label: How are you doing it today?
+      description: Current workflow / workaround, if any.
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help
+      description: Describe the change you'd like, even at a sketch level.
+    validations:
+      required: false

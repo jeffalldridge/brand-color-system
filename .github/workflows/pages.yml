@@ -1,0 +1,66 @@
+name: Deploy to GitHub Pages
+
+# Build the Next.js static export and publish it to GitHub Pages on every
+# push to main. No commits to a gh-pages branch — uses the modern
+# actions/deploy-pages flow that ships a build artifact straight to Pages.
+
+on:
+  push:
+    branches: [main]
+  # Allow manual re-deploys from the Actions tab.
+  workflow_dispatch:
+
+# One concurrent deploy at a time. If two pushes land in quick succession,
+# the second waits and supersedes the first.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Build static export
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Pages will refuse to serve directories whose name starts with `_`
+      # (Jekyll convention). Next emits `_next/`. The `.nojekyll` marker
+      # disables Jekyll processing entirely.
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
