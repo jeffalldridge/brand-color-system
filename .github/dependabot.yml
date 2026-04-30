@@ -17,6 +17,18 @@ updates:
         exclude-patterns:
           - "next"
           - "eslint-config-next"
+    ignore:
+      # Keep major toolchain jumps intentional. ESLint 10 currently breaks the
+      # Next lint stack, and this app targets Node 20 in CI.
+      - dependency-name: "eslint"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "typescript"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@types/node"
+        update-types:
+          - "version-update:semver-major"
 
   - package-ecosystem: "github-actions"
     directory: "/"
